@@ -204,7 +204,7 @@ export default function Timeline(): React.ReactElement {
 
   return (
     <div className={styles.container} data-row='milestones'>
-      <strong className={styles.heading}>Lini Masa Timeline</strong>
+      {/* <strong className={styles.heading}>Lini Masa Timeline</strong> */}
       <button className={`${styles.navButton} ${styles.navLeft}`} onClick={goPrev} aria-label='Scroll left'>
         <ChevronBack />
       </button>
@@ -245,4 +245,4 @@ export default function Timeline(): React.ReactElement {
       </button>
     </div>
   );
-} 
+}
