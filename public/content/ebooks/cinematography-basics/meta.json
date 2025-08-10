@@ -1,0 +1,11 @@
+{
+  "title": "Cinematography Basics",
+  "overview": "Lighting, lenses, and composition for filmmakers.",
+  "rating": 4.4,
+  "genre": [
+    {
+      "id": 18,
+      "name": "Drama"
+    }
+  ]
+}

@@ -1,9 +1,24 @@
+@import './variables.scss';
+
 html,
 body {
   padding: 0;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  min-height: 100%;
+  background: $bg-gradient-primary;
+  background-attachment: fixed;
+  color: $white;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: $bg-gradient-radial;
+  pointer-events: none;
+  z-index: 0;
 }
 
 a {

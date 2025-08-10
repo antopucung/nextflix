@@ -20,6 +20,11 @@
     z-index: 0;
     object-fit: fill;
     mask-image: linear-gradient(to bottom, $secondary 36%, transparent 100%);
+    -webkit-user-drag: none;
+    user-drag: none;
+    -webkit-user-select: none;
+    user-select: none;
+    pointer-events: none;
 
     @include for-mobile-only {
       height: 68vh;

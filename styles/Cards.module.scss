@@ -5,84 +5,160 @@
   display: flex;
   flex-direction: column;
   text-transform: capitalize;
-  margin-top: -9rem;
+  margin-top: 0;
+  margin-bottom: $space-3;
+  position: relative; // anchors nav buttons
+  /* Do NOT set a non-auto z-index here to avoid creating a limiting stacking context */
 
   @include for-mobile-only {
     margin-top: 0;
   }
 
+  &:hover {
+    z-index: 1000;
+  }
+
   .category {
     @include fluid-type(0.88rem, 1.6rem);
-    margin-left: 3rem;
-    padding: 0.5rem 0;
+    margin-left: $space-7;
+    padding: $space-2 0;
     width: fit-content;
+  }
+
+  .scroller {
+    position: relative;
+    overflow-x: auto;
+    overflow-y: visible;
+    scroll-snap-type: x proximity;
+    scroll-padding-left: $space-7;
+    scroll-behavior: smooth;
+    overscroll-behavior-x: contain;
+
+    // hide scrollbar cross-browser
+    scrollbar-width: none; // Firefox
+    -ms-overflow-style: none; // IE/Edge Legacy
+    &::-webkit-scrollbar { display: none; } // WebKit
   }
 
   .cardRow {
     display: flex;
     flex-direction: row;
-    padding: 3.2rem 6rem 12.5rem;
-    overflow-x: auto;
-    margin-top: -3rem;
-    margin-left: -3rem;
+    padding: $space-3 $space-7 $space-6 $space-7;
+    overflow: visible;
+    margin-top: 0;
+    margin-left: 0;
+    gap: $space-2;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
 
     &::-webkit-scrollbar {
       display: none;
     }
 
     @include for-mobile-only {
-      padding: 3.2rem 6rem 2.2rem;
+      padding: $space-3 $space-3 $space-5 $space-3;
     }
   }
+
+  .navButton {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,255,255,0.4);
+    border-radius: 9999px;
+    padding: $space-2;
+    color: #fff;
+    cursor: pointer;
+    pointer-events: auto;
+  }
+  .navLeft { left: $space-2; }
+  .navRight { right: $space-2; }
 }
 
 .card {
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  width: 14rem;
-  height: 9rem;
-  background-color: $card-color;
-  border-radius: 0.28rem;
-  margin-right: 0.3rem;
-  transition: all 300ms ease;
+  width: clamp(12rem, 18vw, 16rem);
+  height: clamp(10rem, 15vw, 12rem);
+  background: linear-gradient($card-color, $card-color) padding-box,
+              linear-gradient(140deg, rgba($gold-500, 0.55), rgba($gold-600, 0.15)) border-box;
+  border: 1px solid transparent;
+  border-radius: $radius-s;
+  margin-right: $space-1;
+  transition: transform $dur-base $ease-out, box-shadow $dur-base $ease-out, background $dur-base $ease-out;
   z-index: 1;
   cursor: pointer;
+  overflow: visible;
+  scroll-snap-align: start;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  position: relative;
 
   &:hover {
-    transform: scale(1.45);
-    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.6), 0 6px 6px rgba(0, 0, 0, 0.5);
-    z-index: 5;
+    transform: scale(1.1);
+    box-shadow: 0 8px 24px rgba(212, 175, 55, 0.25), $elev-2;
+    z-index: 2000;
+
+    &::after {
+      opacity: 1;
+    }
 
     .cardPoster {
-      height: 85%;
+      height: 50%;
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
     }
     .cardInfo {
-      box-shadow: 0 0 1rem rgba(0, 0, 0, 0.75), 0 6px 6px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 12px 28px rgba(212, 175, 55, 0.15), $elev-3;
       display: flex;
       flex-direction: column;
       height: fit-content;
     }
   }
 
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.55) 100%);
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity $dur-base $ease-out;
+    pointer-events: none;
+  }
+
   .cardPoster {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 0.28rem;
+    border-radius: $radius-s;
+    user-drag: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    user-select: none;
+    pointer-events: none;
   }
 
   .cardInfo {
     min-height: fit-content;
-    background-color: $secondary;
-    border-bottom-left-radius: 0.28rem;
-    border-bottom-right-radius: 0.28rem;
+    background-color: rgba(0,0,0,0.55);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    border-top: 1px solid rgba($gold-500, 0.35);
+    border-bottom-left-radius: $radius-s;
+    border-bottom-right-radius: $radius-s;
     display: none;
-    padding: 0.4rem;
+    padding: $space-2;
     font-size: inherit;
   }
+}
+
+.selected {
+  outline: 2px solid $gold-500;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.35);
 }
 
 .modalButton {
@@ -94,28 +170,36 @@
 
 .dot {
   color: $button-border;
-  padding: 0 0.3rem;
+  padding: 0 $space-1;
 }
 
 .longCard {
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  width: 14rem;
-  height: 24rem;
-  background-color: $card-color;
-  border-radius: 0.28rem;
-  margin-right: 0.3rem;
-  transition: all 320ms ease-in-out;
+  width: clamp(12rem, 18vw, 16rem);
+  height: clamp(20rem, 30vw, 26rem);
+  background: linear-gradient($card-color, $card-color) padding-box,
+              linear-gradient(140deg, rgba($gold-500, 0.55), rgba($gold-600, 0.15)) border-box;
+  border: 1px solid transparent;
+  border-radius: $radius-s;
+  margin-right: $space-1;
+  transition: transform $dur-base $ease-out, box-shadow $dur-base $ease-out, background $dur-base $ease-out;
   z-index: 1;
   cursor: pointer;
+  overflow: visible;
+  scroll-snap-align: start;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  position: relative;
 
   &:hover {
-    transform: scale(1.15);
-    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.6), 0 4px 4px rgba(0, 0, 0, 0.5);
-    z-index: 5;
+    transform: scale(1.1);
+    box-shadow: $elev-2;
+    z-index: 2000;
 
     .cardPoster {
+      height: 50%;
+      -webkit-mask-image: linear-gradient(to bottom, $secondary 70%, transparent 100%);
       mask-image: linear-gradient(to bottom, $secondary 70%, transparent 100%);
     }
     .more {
@@ -128,17 +212,22 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 0.28rem;
+    border-radius: $radius-s;
+    user-drag: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    user-select: none;
+    pointer-events: none;
   }
 }
 .more {
-  border-bottom-left-radius: 0.28rem;
-  border-bottom-right-radius: 0.28rem;
+  border-bottom-left-radius: $radius-s;
+  border-bottom-right-radius: $radius-s;
   display: none;
   width: 100%;
   position: absolute;
   bottom: 0;
-  padding: 0.4rem;
+  padding: $space-2;
   z-index: 8;
 }
 .actionRow {
@@ -155,20 +244,20 @@
 }
 
 .textDetails {
-  padding: 0.2rem 0.3rem;
+  padding: $space-1 $space-1;
   font-size: 0.75rem;
 
   .greenText {
     color: $greenText;
     font-weight: bold;
-    padding: 0.2rem;
+    padding: $space-1;
     padding-left: 0;
   }
 
   .rating {
-    border: $button-border solid 1px;
-    padding: 0 0.2rem;
-    margin: 0 0.2rem;
+    border: $gold-500 solid 1px;
+    padding: 0 $space-1;
+    margin: 0 $space-1;
   }
 
   .regularText {
@@ -184,8 +273,8 @@
   margin-left: 0.5rem;
   overflow: visible;
   width: 11rem;
-  margin-top: -3.5rem;
-  margin-bottom: -3.5rem;
+  margin-top: -3.2rem;
+  margin-bottom: -3.2rem;
 
   .rank {
     font-size: 13rem;
@@ -203,34 +292,37 @@
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  width: 7.2rem;
-  height: 10rem;
-  background-color: $card-color;
-  border-top-right-radius: 0.28rem;
-  border-bottom-right-radius: 0.28rem;
-  margin-right: 0.5rem;
-  transition: all 300ms ease;
+  width: clamp(6.5rem, 10vw, 8rem);
+  height: clamp(9rem, 14vw, 11rem);
+  background: linear-gradient($card-color, $card-color) padding-box,
+              linear-gradient(140deg, rgba($gold-500, 0.55), rgba($gold-600, 0.15)) border-box;
+  border: 1px solid transparent;
+  border-top-right-radius: $radius-s;
+  border-bottom-right-radius: $radius-s;
+  margin-right: $space-2;
+  transition: transform $dur-base $ease-out, box-shadow $dur-base $ease-out, background $dur-base $ease-out;
   z-index: 3;
   cursor: pointer;
+  overflow: visible;
+  scroll-snap-align: start;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
 
   &:hover {
-    transform: scale(1.6);
-    width: 14rem;
-    height: 9rem;
-    border-radius: 0.28rem;
-    z-index: 5;
-    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.6), 0 6px 6px rgba(0, 0, 0, 0.5);
+    transform: scale(1.1);
+    border-radius: $radius-s;
+    z-index: 2000;
+    box-shadow: $elev-2;
 
     .poster {
-      height: 85%;
-      border-top-left-radius: 0.28rem;
+      height: 50%;
+      border-top-left-radius: $radius-s;
       border-bottom-right-radius: 0;
     }
 
     .info {
       display: flex;
       flex-direction: column;
-      box-shadow: 0 0 1rem rgba(0, 0, 0, 0.75), 0 6px 6px rgba(0, 0, 0, 0.5);
+      box-shadow: $elev-3;
       min-height: fit-content;
     }
   }
@@ -239,17 +331,25 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-top-right-radius: 0.28rem;
-    border-bottom-right-radius: 0.28rem;
+    border-top-right-radius: $radius-s;
+    border-bottom-right-radius: $radius-s;
+    user-drag: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    user-select: none;
+    pointer-events: none;
   }
 }
 
 .info {
   min-height: fit-content;
-  background-color: $secondary;
-  border-bottom-left-radius: 0.28rem;
-  border-bottom-right-radius: 0.28rem;
+  background-color: rgba(0,0,0,0.55);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  border-top: 1px solid rgba($gold-500, 0.35);
+  border-bottom-left-radius: $radius-s;
+  border-bottom-right-radius: $radius-s;
   display: none;
-  padding: 0.4rem;
+  padding: $space-2;
   font-size: inherit;
 }

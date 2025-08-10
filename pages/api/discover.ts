@@ -3,6 +3,7 @@ import { NextApiResponse, NextApiRequest } from 'next';
 import { parse } from '../../utils/apiResolvers';
 import { MediaType, Media } from '../../types';
 import getInstance from '../../utils/axios';
+import { filterByGenre, getMockByType } from '../../utils/mockDb';
 
 interface Response {
   type: 'Success' | 'Error';
@@ -28,7 +29,7 @@ export default async function handler(request: NextApiRequest, response: NextApi
 
     response.status(200).json({ type: 'Success', data });
   } catch (error) {
-    console.log(error.data);
-    response.status(500).json({ type: 'Error', data: error.data });
+    const mock = filterByGenre(getMockByType(type), genre);
+    response.status(200).json({ type: 'Success', data: mock });
   }
 }

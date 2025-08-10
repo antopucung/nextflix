@@ -2,13 +2,6 @@
 @import './mixins.scss';
 
 .container {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
   background-color: $secondary;
   color: $white;
-
-  .contentContainer {
-    margin-left: 0.8rem;
-  }
 }

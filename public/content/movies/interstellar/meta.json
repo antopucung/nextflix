@@ -1,0 +1,11 @@
+{
+  "title": "Interstellar",
+  "overview": "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
+  "rating": 8.6,
+  "genre": [
+    {
+      "id": 18,
+      "name": "Drama"
+    }
+  ]
+}

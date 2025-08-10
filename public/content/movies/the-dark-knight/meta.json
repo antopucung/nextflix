@@ -1,0 +1,15 @@
+{
+  "title": "The Dark Knight",
+  "overview": "Batman raises the stakes in his war on crime. With the help of Lt. Jim Gordon and District Attorney Harvey Dent...",
+  "rating": 9,
+  "genre": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    }
+  ]
+}

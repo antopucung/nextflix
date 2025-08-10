@@ -6,18 +6,22 @@ import Button from '../Button';
 import { Media } from '../../types';
 import { Play, Info } from '../../utils/icons';
 import { ModalContext } from '../../context/ModalContext';
+import { PlayerContext } from '../../context/PlayerContext';
 import styles from '../../styles/Banner.module.scss';
-
-
 
 export default function Banner() {
   const [media, setMedia] = useState<Media>();
   const random = Math.floor(Math.random() * 20);
   const { setModalData, setIsModal } = useContext(ModalContext);
+  const { play } = useContext(PlayerContext);
 
   const onClick = (data: Media) => {
     setModalData(data);
     setIsModal(true);
+  };
+
+  const onPlay = (data?: Media) => {
+    if (data) play(data);
   };
 
   const getMedia = async () => {
@@ -38,7 +42,7 @@ export default function Banner() {
         <div className={styles.title}>{media?.title}</div>
         <div className={styles.synopsis}>{media?.overview}</div>
         <div className={styles.buttonRow}>
-          <Button label='Play' filled Icon={Play} />
+          <Button label='Play' filled Icon={Play} onClick={() => onPlay(media)} />
           {media && <Button label='More Info' Icon={Info} onClick={() => onClick(media)} />}
         </div>
       </div>

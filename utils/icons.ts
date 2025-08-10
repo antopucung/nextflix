@@ -7,8 +7,12 @@ import {
   IoChevronDown as Down,
   IoLogoLinkedin as Linkedin,
   IoLogoTwitter as Twitter,
-  IoLogoGithub as Github
+  IoLogoGithub as Github,
+  IoBookOutline as Book,
+  IoChevronBackOutline as ChevronBack,
+  IoChevronForwardOutline as ChevronForward,
+  IoTvOutline as Monitor
 } from 'react-icons/io5';
 import { AiOutlineLike as Like, AiOutlineDislike as Dislike } from 'react-icons/ai';
 
-export { Info, CaretDown, Play, Search, Notifications, Add, Down, Like, Dislike, Linkedin, Twitter, Github };
+export { Info, CaretDown, Play, Search, Notifications, Add, Down, Like, Dislike, Linkedin, Twitter, Github, Book, ChevronBack, ChevronForward, Monitor };

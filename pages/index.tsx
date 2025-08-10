@@ -1,9 +1,8 @@
+/* eslint-disable @next/next/no-img-element */
 import Head from 'next/head';
-import Image from 'next/image';
 import { NextRouter, useRouter } from 'next/router';
 
 import styles from '../styles/Login.module.scss';
-import LoginBg from '../public/assets/loginBg.jpg';
 import { ROUTES } from '../config/route';
 
 export default function Home(): React.ReactElement {
@@ -22,7 +21,7 @@ export default function Home(): React.ReactElement {
       </Head>
 
       <main className={styles.main}>
-        <Image src={LoginBg} alt='background image' placeholder='blur' layout='fill' className={styles.main__bgImage} />
+        <img src='/assets/loginBg.jpg' alt='background image' className={styles.main__bgImage} />
         <div className={styles.main__card}>
           <h1>
             Nextflix

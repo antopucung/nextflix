@@ -5,13 +5,15 @@ import { ModalContext } from '../../context/ModalContext';
 import { Play, Add, Like, Dislike } from '../../utils/icons';
 import Button from '../Button';
 import { Genre } from '../../types';
+import { PlayerContext } from '../../context/PlayerContext';
 
 export default function Modal() {
   const { modalData, setIsModal, isModal } = useContext(ModalContext);
   const { title, banner, rating, overview, genre } = modalData;
+  const { play } = useContext(PlayerContext);
 
   return (
-    <div className={styles.container} style={{ display: isModal ? 'flex' : 'none' }}>
+    <div className={`${styles.container} ${isModal ? styles.containerOpen : ''}`}>
       <div className={styles.overlay} onClick={() => setIsModal(false)}></div>
       <div className={styles.modal}>
         <div className={styles.spotlight}>
@@ -19,7 +21,7 @@ export default function Modal() {
           <div className={styles.details}>
             <div className={styles.title}>{title}</div>
             <div className={styles.buttonRow}>
-              <Button label='Play' filled Icon={Play} />
+              <Button label='Play' filled Icon={Play} onClick={() => play(modalData)} />
               <Button Icon={Add} rounded />
               <Button Icon={Like} rounded />
               <Button Icon={Dislike} rounded />

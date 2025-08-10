@@ -3,10 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "PORT=3000 next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "start": "PORT=3000 next start",
+    "lint": "next lint && stylelint \"styles/**/*.scss\"",
+    "prepare": "husky install",
+    "seed:local": "node --experimental-fetch ./scripts/seedLocalContent.mjs",
+    "start:mac": "bash ./scripts/start-nextflix-mac.command",
+    "start:win": "powershell -ExecutionPolicy Bypass -File ./scripts/start-nextflix-win.ps1",
+    "autostart:mac": "bash ./scripts/install-autostart-mac.command",
+    "autostart:win": "powershell -ExecutionPolicy Bypass -File ./scripts/install-autostart-win.ps1"
   },
   "dependencies": {
     "axios": "^0.21.1",
@@ -26,6 +32,10 @@
     "eslint": "7.31.0",
     "eslint-config-next": "11.0.1",
     "prettier": "^2.3.2",
+    "stylelint": "^16.0.0",
+    "stylelint-config-standard-scss": "^13.0.0",
+    "stylelint-no-unsupported-browser-features": "^7.0.0",
+    "husky": "^8.0.0",
     "typescript": "4.3.5"
   }
 }

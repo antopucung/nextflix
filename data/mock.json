@@ -1,0 +1,180 @@
+{
+  "movie": [
+    {
+      "id": 1,
+      "title": "Inception",
+      "overview": "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea.",
+      "poster": "https://picsum.photos/seed/inception-poster/500/750",
+      "banner": "https://picsum.photos/seed/inception-banner/1280/720",
+      "rating": 8.8,
+      "genre": [{ "id": 28, "name": "Action" }, { "id": 9648, "name": "Mystery" }]
+    },
+    {
+      "id": 2,
+      "title": "The Dark Knight",
+      "overview": "Batman raises the stakes in his war on crime. With the help of Lt. Jim Gordon and District Attorney Harvey Dent...",
+      "poster": "https://picsum.photos/seed/darkknight-poster/500/750",
+      "banner": "https://picsum.photos/seed/darkknight-banner/1280/720",
+      "rating": 9.0,
+      "genre": [{ "id": 28, "name": "Action" }, { "id": 18, "name": "Drama" }]
+    },
+    {
+      "id": 3,
+      "title": "Interstellar",
+      "overview": "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
+      "poster": "https://picsum.photos/seed/interstellar-poster/500/750",
+      "banner": "https://picsum.photos/seed/interstellar-banner/1280/720",
+      "rating": 8.6,
+      "genre": [{ "id": 18, "name": "Drama" }]
+    },
+    {
+      "id": 4,
+      "title": "Get Out",
+      "overview": "A young African-American visits his white girlfriend's parents for the weekend, where his simmering uneasiness...",
+      "poster": "https://picsum.photos/seed/getout-poster/500/750",
+      "banner": "https://picsum.photos/seed/getout-banner/1280/720",
+      "rating": 7.7,
+      "genre": [{ "id": 27, "name": "Horror" }, { "id": 9648, "name": "Mystery" }]
+    },
+    {
+      "id": 5,
+      "title": "Toy Story",
+      "overview": "A cowboy doll is profoundly threatened and jealous when a new spaceman figure supplants him as top toy.",
+      "poster": "https://picsum.photos/seed/toystory-poster/500/750",
+      "banner": "https://picsum.photos/seed/toystory-banner/1280/720",
+      "rating": 8.3,
+      "genre": [{ "id": 16, "name": "Animation" }, { "id": 35, "name": "Comedy" }]
+    },
+    {
+      "id": 6,
+      "title": "Parasite",
+      "overview": "Greed and class discrimination threaten the newly formed symbiotic relationship between the wealthy Park family and the destitute Kim clan.",
+      "poster": "https://picsum.photos/seed/parasite-poster/500/750",
+      "banner": "https://picsum.photos/seed/parasite-banner/1280/720",
+      "rating": 8.5,
+      "genre": [{ "id": 18, "name": "Drama" }]
+    },
+    {
+      "id": 7,
+      "title": "A Quiet Place",
+      "overview": "In a post-apocalyptic world, a family is forced to live in silence while hiding from monsters with ultra-sensitive hearing.",
+      "poster": "https://picsum.photos/seed/aquietplace-poster/500/750",
+      "banner": "https://picsum.photos/seed/aquietplace-banner/1280/720",
+      "rating": 7.5,
+      "genre": [{ "id": 27, "name": "Horror" }, { "id": 18, "name": "Drama" }]
+    },
+    {
+      "id": 8,
+      "title": "The Hangover",
+      "overview": "Three buddies wake up from a bachelor party in Las Vegas, with no memory of the previous night and the bachelor missing.",
+      "poster": "https://picsum.photos/seed/hangover-poster/500/750",
+      "banner": "https://picsum.photos/seed/hangover-banner/1280/720",
+      "rating": 7.7,
+      "genre": [{ "id": 35, "name": "Comedy" }]
+    },
+    {
+      "id": 9,
+      "title": "Mad Max: Fury Road",
+      "overview": "In a post-apocalyptic wasteland, Max teams up with a mysterious woman, Furiosa, to try and survive.",
+      "poster": "https://picsum.photos/seed/madmax-poster/500/750",
+      "banner": "https://picsum.photos/seed/madmax-banner/1280/720",
+      "rating": 8.1,
+      "genre": [{ "id": 28, "name": "Action" }]
+    },
+    {
+      "id": 10,
+      "title": "The Godfather",
+      "overview": "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.",
+      "poster": "https://picsum.photos/seed/godfather-poster/500/750",
+      "banner": "https://picsum.photos/seed/godfather-banner/1280/720",
+      "rating": 9.2,
+      "genre": [{ "id": 18, "name": "Drama" }]
+    }
+  ],
+  "tv": [
+    {
+      "id": 101,
+      "title": "Stranger Things",
+      "overview": "When a young boy disappears, his mother and friends must confront terrifying supernatural forces.",
+      "poster": "https://picsum.photos/seed/strangerthings-poster/500/750",
+      "banner": "https://picsum.photos/seed/strangerthings-banner/1280/720",
+      "rating": 8.7,
+      "genre": [{ "id": 18, "name": "Drama" }, { "id": 9648, "name": "Mystery" }]
+    },
+    {
+      "id": 102,
+      "title": "Breaking Bad",
+      "overview": "A high school chemistry teacher turned methamphetamine producer partners with a former student.",
+      "poster": "https://picsum.photos/seed/breakingbad-poster/500/750",
+      "banner": "https://picsum.photos/seed/breakingbad-banner/1280/720",
+      "rating": 9.5,
+      "genre": [{ "id": 18, "name": "Drama" }]
+    },
+    {
+      "id": 103,
+      "title": "The Witcher",
+      "overview": "Geralt of Rivia, a solitary monster hunter, struggles to find his place in a world.",
+      "poster": "https://picsum.photos/seed/witcher-poster/500/750",
+      "banner": "https://picsum.photos/seed/witcher-banner/1280/720",
+      "rating": 8.2,
+      "genre": [{ "id": 10765, "name": "Sci-Fi & Fantasy" }, { "id": 18, "name": "Drama" }]
+    },
+    {
+      "id": 104,
+      "title": "Friends",
+      "overview": "Follows the personal and professional lives of six twenty to thirty-something-year-old friends living in Manhattan.",
+      "poster": "https://picsum.photos/seed/friends-poster/500/750",
+      "banner": "https://picsum.photos/seed/friends-banner/1280/720",
+      "rating": 8.9,
+      "genre": [{ "id": 35, "name": "Comedy" }]
+    },
+    {
+      "id": 105,
+      "title": "The Mandalorian",
+      "overview": "A lone gunfighter makes his way through the outer reaches of the galaxy, far from the authority of the New Republic.",
+      "poster": "https://picsum.photos/seed/mandalorian-poster/500/750",
+      "banner": "https://picsum.photos/seed/mandalorian-banner/1280/720",
+      "rating": 8.7,
+      "genre": [{ "id": 10765, "name": "Sci-Fi & Fantasy" }, { "id": 28, "name": "Action" }]
+    }
+  ],
+  "ebooks": [
+    {
+      "id": 201,
+      "title": "Film Theory 101",
+      "overview": "A beginner's guide to film theory and analysis.",
+      "cover": "https://picsum.photos/seed/ebook1-cover/500/750",
+      "banner": "https://picsum.photos/seed/ebook1-banner/1280/720",
+      "rating": 4.6,
+      "genre": [{ "id": 18, "name": "Drama" }],
+      "pdfUrl": "https://arxiv.org/pdf/2106.14834.pdf"
+    },
+    {
+      "id": 202,
+      "title": "Cinematography Basics",
+      "overview": "Lighting, lenses, and composition for filmmakers.",
+      "cover": "https://picsum.photos/seed/ebook2-cover/500/750",
+      "banner": "https://picsum.photos/seed/ebook2-banner/1280/720",
+      "rating": 4.4,
+      "genre": [{ "id": 18, "name": "Drama" }],
+      "pdfUrl": "https://arxiv.org/pdf/2102.02820.pdf"
+    },
+    {
+      "id": 203,
+      "title": "Screenwriting Essentials",
+      "overview": "Plot, character, and dialogue craft.",
+      "cover": "https://picsum.photos/seed/ebook3-cover/500/750",
+      "banner": "https://picsum.photos/seed/ebook3-banner/1280/720",
+      "rating": 4.5,
+      "genre": [{ "id": 35, "name": "Comedy" }],
+      "pdfUrl": "https://arxiv.org/pdf/2106.01345.pdf"
+    }
+  ],
+  "milestones": [
+    { "id": 301, "title": "1895: First Film Screening", "overview": "Lumière brothers hold first public film screening.", "banner": "https://picsum.photos/seed/milestone1/1280/720" },
+    { "id": 302, "title": "1927: The Jazz Singer", "overview": "The first feature-length film with synchronized dialog.", "banner": "https://picsum.photos/seed/milestone2/1280/720" },
+    { "id": 303, "title": "1939: Technicolor Era", "overview": "Widespread use of color film.", "banner": "https://picsum.photos/seed/milestone3/1280/720" },
+    { "id": 304, "title": "1995: CGI Breakthrough", "overview": "Toy Story, first fully computer-animated feature film.", "banner": "https://picsum.photos/seed/milestone4/1280/720" },
+    { "id": 305, "title": "2010s: Streaming Revolution", "overview": "Streaming services reshape distribution.", "banner": "https://picsum.photos/seed/milestone5/1280/720" }
+  ]
+} 

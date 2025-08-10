@@ -1,34 +1,94 @@
-# Nextflix 
-A simple Netflix Clone made using [Next.js](https://nextjs.org/) ⚡
+# Nextflix (Offline-First Museum Display)
 
-Currently, I have implemented the basic UI with media details fetch functionality.
+A Netflix-like offline-first app built with Next.js 11, React 17, and SCSS modules. Fully local-friendly: reads content from `public/content/*` without a database and supports a second-monitor, headerless preview for exhibition setups.
 
+## Features
+- Movies, Ebooks (PDF reader), Milestones (timeline) pages
+- Hero screensaver with two-layer crossfade, hover/selection mirroring
+- Row carousels with drag-to-scroll and snap
+- Second monitor preview window (borderless/fullscreen-like), route & state synced
+- Offline-first data from `public/content` with `meta.json`
+- Cross-platform one-click start + autostart scripts
 
-Deployed it using vercel [here](https://nextflix-azure.vercel.app/).
+## Quick Start
+Requirements: Node.js 16–20, Yarn or NPM
 
-Please leave a ⭐ as motivation if you liked the implementation 😄
+```bash
+# Install deps
+npm install
 
+# (Optional) Seed local content into public/content from mock data
+npm run seed:local
 
-## Demo
-![Demo](/public/assets/demo.gif)
-<br />
-<br />
+# Build and start on http://localhost:3000
+npm run build && npm start
+```
 
-## Built with
-* [Next.js](https://nextjs.org/)
-* [Typescript](https://www.typescriptlang.org/)
-* [Sass](https://sass-lang.com/)
-* [TMDB API](https://www.themoviedb.org/)
+## One-Click Start (Recommended)
+- macOS: double-click `scripts/start-nextflix-mac.command` or run:
+  ```bash
+  npm run start:mac
+  ```
+- Windows: double-click `scripts/start-nextflix-win.bat` or run:
+  ```bash
+  npm run start:win
+  ```
+This will install dependencies, seed content, build, start on port 3000, and open the preview window.
 
+## Auto-Start on Login
+- macOS:
+  ```bash
+  npm run autostart:mac
+  ```
+  Installs a LaunchAgent that runs the start script at login.
 
-## Running the project
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+- Windows (PowerShell):
+  ```powershell
+  npm run autostart:win
+  ```
+  Adds a Startup shortcut to the start script.
 
-In the project directory, you can run:
+## Content Structure (Offline)
+Place media and metadata here:
+```
+public/content/
+  movies/<slug>/
+    poster.jpg|png
+    banner.jpg|png
+    video.mp4   # optional
+    meta.json   # { "id": number, "title": string, "overview": string, ... }
+  ebooks/<slug>/
+    cover.jpg|png
+    file.pdf
+    meta.json
+  milestones/<slug>/
+    banner.jpg|png
+    meta.json
+  hero/
+    slide-1.jpg
+    slide-2.jpg
+    slide-3.jpg
+    # or slides described by meta.json
+```
 
-#### `yarn start`
+## Second Monitor Preview
+- Open from the header monitor icon (top-right)
+- On `/milestones`, preview launches in milestones mode (headerless)
+- Mirrors hero/milestones state and route in real time
 
-It runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser. 
+## Scripts
+- `npm run seed:local` – seed `public/content` from mock data
+- `npm run build` / `npm start` – build & serve on port 3000
+- `npm run start:mac` / `npm run start:win` – one-click startup
+- `npm run autostart:mac` / `npm run autostart:win` – install autostart
+
+## Tech
+- Next.js 11, React 17
+- SCSS Modules with design tokens
+- Framer Motion for transitions
+- BroadcastChannel for multi-window sync (with localStorage fallback)
+
+## License
+MIT
 
 

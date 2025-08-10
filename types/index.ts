@@ -43,3 +43,21 @@ export type Section = {
   defaultCard?: boolean;
   topList?: boolean;
 };
+
+export type Ebook = {
+  id: number;
+  title: string;
+  overview: string;
+  cover: string;
+  banner: string;
+  rating: number;
+  genre: Genre[];
+  pdfUrl: string;
+};
+
+export type HeroSlide = {
+  id: number;
+  img: string;
+  title: string;
+  synopsis: string;
+};

@@ -1,6 +1,7 @@
-$primary-button: #e50914;
-$primary-buttonHover: #ad070f;
-$secondary: #141414;
+// Colors
+$primary-button: #D4AF37; // gold primary
+$primary-buttonHover: #B68E2D; // darker gold hover
+$secondary: #1a0a0a; // deep red-black
 
 $navBar-transparent: #141414b3;
 $navBar-gradient: #00000000;
@@ -8,7 +9,66 @@ $background-overlay: #000000bf;
 $white: #fff;
 $white-hover: #e5e5e5;
 $black: #000;
-$card-color: #252525;
+$card-color: #211013; // very dark crimson surface
 $buttonRound-color: #2a2a2a99;
 $button-border: #ffffff80;
 $greenText: #53d853;
+
+// Brand palette
+$red-600: #c8102e;
+$red-700: #a70e26;
+$red-800: #7a0a1b;
+$red-900: #4e060f;
+
+$gold-300: #f7e3a1;
+$gold-400: #f5d076;
+$gold-500: #d4af37;
+$gold-600: #b68e2d;
+$gold-700: #8c6a1f;
+
+// Background gradients inspired by key visual
+$bg-gradient-primary: linear-gradient(180deg, $red-800 0%, $red-900 100%);
+$bg-gradient-radial: radial-gradient(60% 60% at 50% 35%, rgba($red-600, 0.45) 0%, rgba($red-700, 0.35) 40%, rgba($red-900, 0.0) 70%);
+
+// Spacing scale
+$space-1: 4px;
+$space-2: 8px;
+$space-3: 12px;
+$space-4: 16px;
+$space-5: 20px;
+$space-6: 24px;
+$space-7: 32px;
+$space-8: 40px;
+
+// Radii
+$radius-xs: 2px;
+$radius-s: 4px;
+$radius-m: 6px;
+$radius-l: 8px;
+$radius-xl: 12px;
+
+// Typography scale
+$font-xs: 12px;
+$font-s: 14px;
+$font-m: 16px;
+$font-l: 20px;
+$font-xl: 24px;
+$font-2xl: 32px;
+
+// Elevation / shadows
+$elev-1: 0 1px 3px rgba(0,0,0,0.3);
+$elev-2: 0 4px 12px rgba(0,0,0,0.4);
+$elev-3: 0 12px 24px rgba(0,0,0,0.5);
+
+// Motion
+$dur-fast: 150ms;
+$dur-base: 250ms;
+$dur-slow: 400ms;
+$ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+$ease-inout: cubic-bezier(0.45, 0, 0.55, 1);
+
+// Z-index scale
+$z-base: 1;
+$z-overlay: 10;
+$z-modal: 500;
+$z-top: 1000;

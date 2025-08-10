@@ -1,0 +1,11 @@
+{
+  "title": "Film Theory 101",
+  "overview": "A beginner's guide to film theory and analysis.",
+  "rating": 4.6,
+  "genre": [
+    {
+      "id": 18,
+      "name": "Drama"
+    }
+  ]
+}

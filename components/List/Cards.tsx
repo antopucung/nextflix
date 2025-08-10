@@ -1,11 +1,15 @@
 /* eslint-disable @next/next/no-img-element */
-import { useContext } from 'react';
+import { useContext, useRef } from 'react';
 import dynamic from 'next/dynamic';
 
 import { Genre, Media } from '../../types';
 import styles from '../../styles/Cards.module.scss';
 import { ModalContext } from '../../context/ModalContext';
 import { Add, Play, Down, Like, Dislike } from '../../utils/icons';
+import { PlayerContext } from '../../context/PlayerContext';
+import { HoverContext } from '../../context/HoverContext';
+import { useDragContext } from '../../context/DragContext';
+import { FeaturedContext } from '../../context/FeaturedContext';
 
 const Button = dynamic(import('../Button'));
 
@@ -21,19 +25,34 @@ export default function Cards({ defaultCard = true, item }: CardsProps): React.R
   const image = defaultCard ? banner : poster;
 
   const { setModalData, setIsModal } = useContext(ModalContext);
+  const { play } = useContext(PlayerContext);
+  const { open, close } = useContext(HoverContext);
+  const { isDragging } = useDragContext();
+  const { setFeatured, setSelected, selected, selectedKey } = useContext(FeaturedContext);
+  const cardRef = useRef<HTMLDivElement | null>(null);
 
   const onClick = (data: Media) => {
     setModalData(data);
     setIsModal(true);
   };
 
-  return (
+  const onPlay = (data: Media) => {
+    play(data);
+  };
+
+  const onSelect = () => {
+    const row = cardRef.current?.closest('[data-row]') as HTMLElement | null;
+    const rowKey = row?.getAttribute('data-row') || 'row';
+    setSelected(item, `${rowKey}:${item.id}`);
+  };
+
+  const preview = (
     <div className={style}>
       <img src={image} alt='img' className={styles.cardPoster} />
       <div className={infoStyle}>
         <div className={styles.actionRow}>
           <div className={styles.actionRow}>
-            <Button Icon={Play} rounded filled />
+            <Button Icon={Play} rounded filled onClick={() => onPlay(item)} />
             <Button Icon={Add} rounded />
             {defaultCard && (
               <>
@@ -48,7 +67,54 @@ export default function Cards({ defaultCard = true, item }: CardsProps): React.R
           <strong>{title}</strong>
           <div className={styles.row}>
             <span className={styles.greenText}>{`${rating * 10}% match`}</span>
-            {/* <span className={styles.regularText}>length </span> */}
+          </div>
+          {renderGenre(genre)}
+        </div>
+      </div>
+    </div>
+  );
+
+  const onMouseEnter = () => {
+    if (!cardRef.current || isDragging) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    setFeatured(item); // update hero
+    open(preview, rect);
+  };
+
+  const onMouseLeave = () => {
+    close();
+    setFeatured(null); // reset hero
+  };
+
+  const isSelected = selected?.id === item.id && selectedKey?.startsWith((cardRef.current?.closest('[data-row]') as HTMLElement | null)?.getAttribute('data-row') || '');
+
+  return (
+    <div
+      ref={cardRef}
+      className={`${style} ${isSelected ? styles.selected : ''}`}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      onClick={onSelect}
+    >
+      <img src={image} alt='img' className={styles.cardPoster} />
+      <div className={infoStyle}>
+        <div className={styles.actionRow}>
+          <div className={styles.actionRow}>
+            <Button Icon={Play} rounded filled onClick={() => onPlay(item)} />
+            <Button Icon={Add} rounded />
+            {defaultCard && (
+              <>
+                <Button Icon={Like} rounded />
+                <Button Icon={Dislike} rounded />
+              </>
+            )}
+          </div>
+          <Button Icon={Down} rounded onClick={() => onClick(item)} />
+        </div>
+        <div className={styles.textDetails}>
+          <strong>{title}</strong>
+          <div className={styles.row}>
+            <span className={styles.greenText}>{`${rating * 10}% match`}</span>
           </div>
           {renderGenre(genre)}
         </div>

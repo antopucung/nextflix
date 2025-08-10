@@ -1,3 +1,15 @@
 {
-  "extends": ["next", "next/core-web-vitals"]
+  "extends": ["next", "next/core-web-vitals"],
+  "rules": {
+    "react/jsx-no-bind": ["warn"],
+    "react/no-unknown-property": ["error", {"ignore": ["css"]}],
+    "react/forbid-component-props": ["warn", {"forbid": [{"propName": "style", "message": "Use SCSS modules and tokens; inline styles are not allowed"}]}],
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "Literal[value=/\\b(?:bg-|text-|flex|grid|px-|py-|p-|m-|mt-|mb-|ml-|mr-)\\b/]",
+        "message": "Do not use Tailwind-like utility classes; use SCSS modules and tokens"
+      }
+    ]
+  }
 }

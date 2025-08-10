@@ -2,15 +2,16 @@
 @import './_variables.scss';
 
 .container {
-  position: fixed;
+  display: none;
+}
+
+.containerOpen {
   display: flex;
+  position: fixed;
+  inset: 0;
   align-items: center;
   justify-content: center;
-  z-index: 500;
-  width: 100vw;
-  height: 100vh;
-  top: 0;
-  left: 0;
+  z-index: 2090; // above any page chrome
 }
 
 .overlay {
@@ -20,18 +21,16 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 550;
+  z-index: 2100; // under modal but above content
 }
 
 .modal {
   background-color: $secondary;
   color: $white;
-  z-index: 600;
+  z-index: 2110; // topmost
   min-width: 55%;
   max-width: 60%;
-  position: absolute;
-  align-self: center;
-  justify-self: center;
+  position: relative; // allow flex centering from container
   border-radius: 0.7rem;
   overflow: hidden;
 }
@@ -100,6 +99,7 @@
     height: 70%;
     z-index: 0;
     object-fit: fill;
+    -webkit-mask-image: linear-gradient(to bottom, $secondary 36%, transparent 100%);
     mask-image: linear-gradient(to bottom, $secondary 36%, transparent 100%);
 
     @include for-mobile-only {

@@ -3,6 +3,7 @@ import { useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/router';
 
 import { Maybe } from '../../types';
 import { CaretDown } from '../../utils/icons';
@@ -11,12 +12,17 @@ import useDimensions from '../../hooks/useDimensions';
 
 const Dialog = dynamic(import('../Dialog'))
 
-const browseList = ['Home', 'TV Shows', 'Movies', 'New & Popular', 'My List'];
+const items = [
+  { label: 'Movie', path: '/browse' },
+  { label: 'Ebook', path: '/ebooks' },
+  { label: 'Milestone', path: '/milestones' }
+];
 
 export default function Menu() {
   const { isMobile, isTablet } = useDimensions();
   const menuRef = useRef<Maybe<HTMLDivElement>>(null);
   const [isVisible, setIsVisible] = useState<boolean>(false);
+  const router = useRouter();
 
   const onMenu = (): void => {
     setIsVisible(true);
@@ -28,14 +34,15 @@ export default function Menu() {
   const caretAnimation = {
     animate: isVisible ? 'up' : 'down',
     variants: {
-      up: {
-        rotate: 180
-      },
-      down: {
-        rotate: 0
-      }
+      up: { rotate: 180 },
+      down: { rotate: 0 }
     },
     transition: { duration: 0.25 }
+  };
+
+  const go = async (path: string) => {
+    setIsVisible(false);
+    if (router.pathname !== path) await router.push(path);
   };
 
   return (
@@ -52,19 +59,15 @@ export default function Menu() {
             </motion.div>
           </div>
           <Dialog dialogRef={menuRef} onClose={onClose} classname={styles.menu} visible={isVisible}>
-            {browseList.map((item, index) => (
-              <div key={index} className={styles.options}>
-                {item}
+            {items.map((item, index) => (
+              <div key={index} className={styles.options} onClick={() => go(item.path)}>
+                {item.label}
               </div>
             ))}
           </Dialog>
         </>
       ) : (
-        browseList.map((item, index) => (
-          <div key={index} className={styles.options}>
-            {item}
-          </div>
-        ))
+        <></>
       )}
     </>
   );

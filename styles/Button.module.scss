@@ -4,10 +4,11 @@
 .button {
   z-index: 10;
   color: $black;
+  background-color: $gold-500;
   text-shadow: none;
   width: fit-content;
   padding: 0.7rem 1.8rem;
-  border-radius: 0.3rem;
+  border-radius: $radius-l;
   cursor: pointer;
   display: flex;
   flex-direction: row;
@@ -16,18 +17,23 @@
   margin: 0.4rem;
   outline: none;
   border: none;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+  transition: background-color $dur-base $ease-out, transform $dur-base $ease-out, box-shadow $dur-base $ease-out;
 
   @include for-mobile-only {
-    background-color: tomato;
+    background-color: $gold-500;
+    color: $black;
     padding: 0.5rem 1.2rem;
   }
 
   &:hover {
-    opacity: 0.8;
+    background-color: $gold-600;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.35);
   }
 
   .label {
-    font-weight: bold;
+    font-weight: 700;
     margin-left: 0.8rem;
 
     @include fluid-type(0.9rem, 1.1rem);
@@ -44,6 +50,7 @@
 .roundButton {
   z-index: 10;
   color: $black;
+  background-color: $gold-500;
   text-shadow: none;
   padding: 0.4rem;
   border-radius: 100%;
@@ -57,9 +64,12 @@
   outline: none;
   border: none;
   width: min-content;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: background-color $dur-base $ease-out, transform $dur-base $ease-out;
 
   &:hover {
-    opacity: 0.8;
+    background-color: $gold-600;
+    transform: translateY(-1px);
   }
 
   .icon {
@@ -69,7 +79,8 @@
 
 .outlineRounded {
   z-index: 10;
-  background-color: $buttonRound-color !important;
+  background-color: rgba(0,0,0,0.35) !important;
+  color: $white;
   padding: 0.3rem;
   border-radius: 100%;
   cursor: pointer;
@@ -86,5 +97,6 @@
 
   &:hover {
     border-color: $white;
+    background-color: rgba(0,0,0,0.45) !important;
   }
 }
