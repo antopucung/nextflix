@@ -54,7 +54,7 @@ export default function Hero(): React.ReactElement {
     '/content/movies/1.Garuda-Pancasila-Sejarah-Penciptaan-Lambang-Negara/video-1.mp4',
     '/content/movies/2.Salam-Merdeka-dan-Salam-Pancasila/video-2.mp4',
     '/content/movies/3.Buku-Api-Pancasila/video-3.mp4',
-    '/content/movies/4.REV-SALAM-PANCASIL/video-4.mp4'
+    '/content/movies/4.REV-SALAM-PANCASILA/video-4.mp4'
   ];
 
   // Global activity listeners to reset idle timer
