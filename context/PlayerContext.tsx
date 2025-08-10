@@ -16,9 +16,10 @@ function getTrailerUrlFor(media: Media): string {
   const local = (media as any).videoUrl as string | undefined;
   if (local && local.length > 0) return local;
   const samples = [
-    'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-    'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
-    'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4'
+    '/content/movies/dewa/1.Garuda-Pancasila-Sejarah-Penciptaan-/video-1.mp4',
+    '/content/movies/dewa/2.Salam-Merdeka-dan-Salam-Pancasila/video-1.mp4',
+    '/content/movies/dewa/3.Buku-Api-Pancasila/video-1.mp4',
+    '/content/movies/dewa/4.REV-SALAM-PANCASILA/video-1.mp4'
   ];
   const index = media.id % samples.length;
   return samples[index];
