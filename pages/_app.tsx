@@ -49,7 +49,7 @@ function App({ Component, pageProps }: AppProps & { pageProps: any }) {
   return (
     <>      
       <Head>
-        <title>Nextflix</title>
+         <title>Arsip Galleri</title>
         <meta name='description' content='Netflix clone, made using Next.js' />
         <link rel='icon' href='/assets/logo-anri.jpg' />
       </Head>
