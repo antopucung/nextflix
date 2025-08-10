@@ -1,16 +1,16 @@
-/* eslint-disable @next/next/no-img-element */
 import { useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
+import Link from 'next/link';  // Import Link from Next.js
 
 import { Maybe } from '../../types';
 import { CaretDown } from '../../utils/icons';
 import styles from '../../styles/Navbar.module.scss';
 import useDimensions from '../../hooks/useDimensions';
 
-const Dialog = dynamic(import('../Dialog'))
+const Dialog = dynamic(import('../Dialog'));
 
 const items = [
   { label: 'Film', path: '/browse' },
@@ -53,7 +53,12 @@ export default function Menu() {
 
   return (
     <>
-      <Image src='/assets/logo-anri.jpg' alt='ANRI' width={120} height={32} className={styles.nfLogo} />
+      {/* Wrap the image with Link to redirect to the homepage */}
+      <Link href="/">
+        <a>
+          <Image src='/assets/logo-anri.jpg' alt='ANRI' width={120} height={32} className={styles.nfLogo} />
+        </a>
+      </Link>
       {isTablet || isMobile ? (
         <>
           <div className={styles.browse}>
