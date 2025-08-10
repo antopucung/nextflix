@@ -60,7 +60,10 @@ export default function Navbar({ isScrolled }: NavbarProps): React.ReactElement 
   useEffect(() => () => { if (previewWin.current && !previewWin.current.closed) previewWin.current.close(); }, []);
 
   const openLiniMasa2 = () => {
-    window.open('/BookAnim/index.html', '_blank', 'noopener');
+    const target = 'NextflixBookAnim';
+    const features = 'noopener,noreferrer';
+    const w = window.open('/BookAnim/index.html', target, features);
+    w?.focus();
   };
 
   return (

@@ -44,7 +44,8 @@ export default function Menu() {
   const go = async (item: { path: string; external?: boolean }) => {
     setIsVisible(false);
     if (item.external) {
-      window.open(item.path, '_blank', 'noopener');
+      const w = window.open(item.path, 'NextflixBookAnim', 'noopener,noreferrer');
+      w?.focus();
       return;
     }
     if (router.pathname !== item.path) await router.push(item.path);
