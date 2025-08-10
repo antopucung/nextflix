@@ -27,7 +27,9 @@ export default function EbooksPage(props: { setGlobalDragging?: (d: boolean) => 
   useEffect(() => {
     let isOpen = false;
     const unsub = subscribeReader(
-      () => { isOpen = true; },
+      () => {
+        isOpen = true;
+      },
       (reason?: ReaderCloseReason) => {
         const wasOpen = prevWasOpenRef.current || isOpen;
         // Only redirect if it was an auto close
@@ -38,7 +40,9 @@ export default function EbooksPage(props: { setGlobalDragging?: (d: boolean) => 
         isOpen = false;
       }
     );
-    return () => { unsub(); };
+    return () => {
+      unsub();
+    };
   }, [router]);
 
   // Page-level idle: if no activity for 60s (and no reader open), go back to movie page
@@ -71,20 +75,43 @@ export default function EbooksPage(props: { setGlobalDragging?: (d: boolean) => 
     <>
       {isModal && <Modal />}
       <Layout>
-        <div className={styles.contentContainer} style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', padding: '8px 0' }}>
+        <div
+          className={styles.contentContainer}
+          style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', padding: '8px 0' }}>
           <div style={{ height: 16, flex: '0 0 auto' }} />
+
+          {/* Modify the offset as per the limit for Arsip A */}
           <section style={{ flex: 1, display: 'flex' }}>
-            <EbooksCarouselRow heading='Arsip - A' offset={0} />
+            <EbooksCarouselRow heading='Asia Raya' offset={8} limit={5} />
           </section>
+
           <section style={{ flex: 1, display: 'flex' }}>
-            <EbooksCarouselRow heading='Arsip - B' offset={5} />
+            <EbooksCarouselRow heading='29 Mei 1945' offset={2} limit={2} />
           </section>
+
           <section style={{ flex: 1, display: 'flex' }}>
-            <EbooksCarouselRow heading='Arsip - C' offset={10} />
+            <EbooksCarouselRow heading='30 Mei 1945' offset={4} limit={1} />
           </section>
+
+          <section style={{ flex: 1, display: 'flex' }}>
+            <EbooksCarouselRow heading='31 Mei 1945' offset={5} limit={3} />
+          </section>
+
+          <section style={{ flex: 1, display: 'flex' }}>
+            <EbooksCarouselRow heading='1 Juni 1945' offset={0} limit={2} />
+          </section>
+
+          <section style={{ flex: 1, display: 'flex' }}>
+            <EbooksCarouselRow heading='Pengantar Arsip' offset={13} limit={1} />
+          </section>
+
+          <section style={{ flex: 1, display: 'flex' }}>
+            <EbooksCarouselRow heading='Pra Sidang' offset={14} limit={1} />
+          </section>
+
           <div style={{ height: 16, flex: '0 0 auto' }} />
         </div>
       </Layout>
     </>
   );
-} 
+}

@@ -8,9 +8,10 @@ import EbookCard from './Card';
 type Props = {
   heading: string;
   offset: number;
+  limit?: number;
 };
 
-export default function EbooksCarouselRow({ heading, offset }: Props): React.ReactElement {
+export default function EbooksCarouselRow({ heading, offset, limit = 5 }: Props): React.ReactElement {
   const [data, setData] = useState<Ebook[]>([]);
 
   useEffect(() => {
@@ -19,14 +20,14 @@ export default function EbooksCarouselRow({ heading, offset }: Props): React.Rea
 
   const items: (Ebook | null)[] = useMemo(() => {
     const n = data.length;
-    const count = 5;
+    const count = limit;
     const start = n > 0 ? ((offset % n) + n) % n : 0;
     const out: (Ebook | null)[] = [];
     for (let i = 0; i < count; i++) {
       out.push(n ? data[(start + i) % n] : null);
     }
     return out;
-  }, [data, offset]);
+  }, [data, offset, limit]);
 
   const fallback: Ebook | null = useMemo(() => (data.length ? data[0] : null), [data]);
 
