@@ -15,8 +15,8 @@ export default function MilestonesPage(): React.ReactElement {
     <>
       {isModal && <Modal />}
       <Layout>
-        <div style={{ height: '3.5rem' }} />
-        <div className={styles.contentContainer}>
+        <div style={{ height: '1rem' }} />
+        <div className={styles.contentContainer} style={{ marginTop: '-7vh' }}>
           <section id='milestones'>
             <Timeline />
           </section>

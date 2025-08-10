@@ -1,5 +1,6 @@
 import React, { createContext, useCallback, useMemo, useState } from 'react';
 import { Media } from '../types';
+import { publishPlayerPlay, publishPlayerStop, publishScreensaver } from '../utils/heroSync';
 
 export type PlayerContextValue = {
   isPlaying: boolean;
@@ -32,12 +33,17 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
     setIsPlaying(false);
     setCurrentMedia(null);
     setVideoUrl(null);
+    publishPlayerStop();
+    publishScreensaver(false);
   }, []);
 
   const play = useCallback((media: Media) => {
+    const url = getTrailerUrlFor(media);
     setCurrentMedia(media);
-    setVideoUrl(getTrailerUrlFor(media));
+    setVideoUrl(url);
     setIsPlaying(true);
+    publishPlayerPlay({ id: media.id, title: media.title, url });
+    publishScreensaver(true);
   }, []);
 
   const value = useMemo(

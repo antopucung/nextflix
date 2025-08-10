@@ -28,7 +28,7 @@ export default function Cards({ defaultCard = true, item }: CardsProps): React.R
   const { play } = useContext(PlayerContext);
   const { open, close } = useContext(HoverContext);
   const { isDragging } = useDragContext();
-  const { setFeatured, setSelected, selected, selectedKey } = useContext(FeaturedContext);
+  const { setFeatured, setSelected, selectedMedia, selectedKey } = useContext(FeaturedContext);
   const cardRef = useRef<HTMLDivElement | null>(null);
 
   const onClick = (data: Media) => {
@@ -86,7 +86,7 @@ export default function Cards({ defaultCard = true, item }: CardsProps): React.R
     setFeatured(null); // reset hero
   };
 
-  const isSelected = selected?.id === item.id && selectedKey?.startsWith((cardRef.current?.closest('[data-row]') as HTMLElement | null)?.getAttribute('data-row') || '');
+  const isSelected = selectedMedia?.id === item.id && selectedKey?.startsWith((cardRef.current?.closest('[data-row]') as HTMLElement | null)?.getAttribute('data-row') || '');
 
   return (
     <div

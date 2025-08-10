@@ -1,0 +1,76 @@
+@import './_variables.scss';
+@import './_mixins.scss';
+
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: $space-2 0;
+}
+
+.deck {
+  width: 100%;
+  max-width: min(1600px, 90vw);
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: $space-2;
+}
+
+.card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: $radius-s;
+  overflow: hidden;
+  background: linear-gradient(rgba(255,255,255,0.06), rgba(255,255,255,0.06)) padding-box,
+              linear-gradient(140deg, rgba($gold-500, 0.35), rgba($gold-600, 0.12)) border-box;
+  border: 1px solid rgba(255,255,255,0.18);
+  box-shadow: 0 6px 22px rgba(0,0,0,0.28);
+  transition: transform $dur-base $ease-out, box-shadow $dur-base $ease-out;
+
+  &:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(0,0,0,0.32); }
+}
+
+.poster {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: $space-2;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,0.65) 100%);
+  opacity: 0;
+  transition: opacity $dur-base $ease-out;
+}
+
+.card:hover .overlay { opacity: 1; }
+
+.title { font-weight: 700; font-size: clamp(0.9rem, 1.8vw, 1.2rem); color: $white; text-shadow: 0 2px 8px rgba(0,0,0,0.6); }
+
+.actions { display: flex; gap: $space-1; }
+
+.btn {
+  appearance: none;
+  border: 1px solid rgba($gold-500, 0.65);
+  background: rgba($gold-500, 0.25);
+  color: $white;
+  border-radius: 12px;
+  min-width: 40px;
+  height: 32px;
+  padding: 0 $space-2;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: transform $dur-base $ease-out, background $dur-base $ease-out, border-color $dur-base $ease-out;
+
+  &:hover { transform: translateY(-1px); background: rgba($gold-500, 0.32); border-color: rgba($gold-500, 0.85); }
+}
+
+.linkCard .overlay { justify-content: center; align-items: center; } 

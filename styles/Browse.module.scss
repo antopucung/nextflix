@@ -5,3 +5,12 @@
   background-color: $secondary;
   color: $white;
 }
+
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.offset20 {
+  padding-top: 5vh; /* move hero + carousel down ~5% */
+}

@@ -73,9 +73,9 @@ export default function Navbar({ isScrolled }: NavbarProps): React.ReactElement 
         <Menu />
         {!isMobile && (
           <div style={{ display: 'flex', marginLeft: '1rem' }}>
-            <div className={`${styles.options} ${active === 'movies' ? 'active' : ''}`} onClick={() => go('/browse')}>Movie</div>
-            <div className={`${styles.options} ${active === 'ebooks' ? 'active' : ''}`} onClick={() => go('/ebooks')}>Ebook</div>
-            <div className={`${styles.options} ${active === 'milestones' ? 'active' : ''}`} onClick={() => go('/milestones')}>Milestone</div>
+            <div className={`${styles.options} ${active === 'movies' ? 'active' : ''}`} onClick={() => go('/browse')}>Film</div>
+            <div className={`${styles.options} ${active === 'ebooks' ? 'active' : ''}`} onClick={() => go('/ebooks')}>Arsip</div>
+            <div className={`${styles.options} ${active === 'milestones' ? 'active' : ''}`} onClick={() => go('/milestones')}>Lini Masa</div>
           </div>
         )}
       </div>

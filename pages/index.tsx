@@ -17,17 +17,17 @@ export default function Home(): React.ReactElement {
       <Head>
         <title>Nextflix</title>
         <meta name='description' content='Netflix clone, made using Next.js' />
-        <link rel='icon' href='/favicon.ico' />
+        <link rel='icon' href='/assets/logo-anri.jpg' />
       </Head>
 
       <main className={styles.main}>
-        <img src='/assets/loginBg.jpg' alt='background image' className={styles.main__bgImage} />
+        <div className={styles.bg} />
         <div className={styles.main__card}>
-          <h1>
-            Nextflix
-          </h1>
-          <p>A simple Netflix clone built using Next.js</p>
-          <div className={styles.button} onClick={onSignIn}>Sign in</div>
+          <img src='/assets/logo-anri.jpg' alt='ANRI' className={styles.brandLogoLg} />
+          <p className={styles.lede}>
+            Pancasila sejak tanggal 1 Juni 1945 yang dipidatokan Ir. Soekarno, rumusan Piagam Jakarta tanggal 22 Juni 1945 hingga rumusan final tanggal 18 Agustus 1945 adalah satu kesatuan proses lahirnya Pancasila sebagai Dasar Negara;
+          </p>
+          <div className={styles.button} onClick={onSignIn}>Enter</div>
         </div>
       </main>
     </div>

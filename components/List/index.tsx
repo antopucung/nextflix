@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef, useContext } from 'react';
 import dynamic from 'next/dynamic';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 
 import { Media } from '../../types';
 import styles from '../../styles/Cards.module.scss';
@@ -16,6 +17,7 @@ interface ListProps {
   topList?: boolean;
   endpoint: string;
   setGlobalDragging?: (d: boolean) => void;
+  maxItems?: number;
 }
 
 type DragMode = 'pending' | 'horizontal' | null;
@@ -25,8 +27,10 @@ export default function List({
   heading,
   topList = false,
   endpoint,
-  setGlobalDragging
+  setGlobalDragging,
+  maxItems
 }: ListProps): React.ReactElement {
+  const router = useRouter();
   const [media, setMedia] = useState<Media[] | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const scrollerRef = useRef<HTMLDivElement | null>(null);
@@ -43,7 +47,8 @@ export default function List({
     try {
       const result = await axios.get(endpoint);
       const data: Media[] = result.data.data || [];
-      const extended = [...data, ...data, ...data, ...data];
+      const base = typeof maxItems === 'number' && maxItems > 0 ? data.slice(0, maxItems) : data;
+      const extended = typeof maxItems === 'number' && maxItems > 0 ? base : [...base, ...base, ...base, ...base];
       setMedia(extended);
       registerRowItems(heading, extended);
     } catch (error) {
@@ -81,6 +86,7 @@ export default function List({
 
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!scrollerRef.current) return;
+    if (maxItems === 5) return; // disable drag when fixed layout
     modeRef.current = 'pending';
     setGlobalDragging?.(false);
     startX.current = e.clientX;
@@ -91,6 +97,7 @@ export default function List({
   };
 
   const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (maxItems === 5) return; // disable drag when fixed layout
     const mode = modeRef.current;
     if (!scrollerRef.current || mode === null) return;
 
@@ -138,19 +145,49 @@ export default function List({
     setGlobalDragging?.(false);
   };
 
-  const placeholders = Array.from({ length: 10 }).map((_, i) => (
+  const placeholders = Array.from({ length: 5 }).map((_, i) => (
     <div key={`ph-${i}`} className={styles.card} style={{ opacity: 0.35, background: 'linear-gradient(90deg, rgba(255,255,255,0.05), rgba(255,255,255,0.08))' }} />
   ));
 
+  const filtered = (media || [])
+    .filter((item) => {
+      if (!globalSearch) return true;
+      const q = globalSearch.toLowerCase();
+      return item.title.toLowerCase().includes(q) || item.overview.toLowerCase().includes(q);
+    })
+    .slice(0, typeof maxItems === 'number' && maxItems > 0 ? maxItems : undefined);
+
+  const fixedFive = maxItems === 5;
+
+  const SpecialCard = ({ label, sublabel, onClick }: { label: string; sublabel: string; onClick: () => void }) => (
+    <div className={`${styles.card} ${styles.specialCard}`} role="button" tabIndex={0} onClick={onClick} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') onClick(); }}>
+      <div
+        className={styles.cardPoster}
+        style={{
+          background: 'linear-gradient(140deg, rgba(212,175,55,0.15), rgba(255,255,255,0.05))',
+          backgroundSize: 'cover'
+        }}
+      />
+      <div className={styles.cardInfo} style={{ display: 'flex' }}>
+        <div className={styles.specialContent}>
+          <div className={styles.specialTitle}>{label}</div>
+          <div className={styles.specialSubtitle}>{sublabel}</div>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
-    <div className={styles.listContainer} ref={listRef} data-row={heading.replace(/\s+/g, '-').toLowerCase()}>
+    <div className={`${styles.listContainer} ${fixedFive ? styles.fiveAcross : ''}`} ref={listRef} data-row={heading.replace(/\s+/g, '-').toLowerCase()}>
       <strong className={styles.category}>{heading}</strong>
-      <button className={`${styles.navButton} ${styles.navLeft}`} onClick={() => scrollBy(-400)} aria-label='Scroll left'>
-        <ChevronBack />
-      </button>
+      {!fixedFive && (
+        <button className={`${styles.navButton} ${styles.navLeft}`} onClick={() => scrollBy(-400)} aria-label='Scroll left'>
+          <ChevronBack />
+        </button>
+      )}
       <div
         ref={scrollerRef}
-        className={styles.scroller}
+        className={`${styles.scroller} ${fixedFive ? styles.scrollerStatic : ''}`}
         data-nodrag
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
@@ -158,18 +195,19 @@ export default function List({
         onPointerLeave={endDrag}
         onDragStart={(e) => e.preventDefault()}
       >
-        <div className={styles.cardRow}>
+        <div className={`${styles.cardRow} ${fixedFive ? styles.cardRowFive : ''}`}>
           {!isLoaded && placeholders}
-          {isLoaded && media?.
-            filter((item) => {
-              if (!globalSearch) return true;
-              const q = globalSearch.toLowerCase();
+          {isLoaded && filtered.map((item, index) => {
+            if (fixedFive && index === 3) {
               return (
-                item.title.toLowerCase().includes(q) ||
-                item.overview.toLowerCase().includes(q)
+                <SpecialCard key={`special-milestones`} label="Lini Masa" sublabel="Buka halaman Milestones" onClick={() => router.push('/milestones')} />
               );
-            })
-            .map((item, index) => {
+            }
+            if (fixedFive && index === 4) {
+              return (
+                <SpecialCard key={`special-ebooks`} label="Arsip & Ebooks" sublabel="Buka halaman Arsip" onClick={() => router.push('/ebooks')} />
+              );
+            }
             if (topList) {
               if (index < 10) {
                 return <FeatureCard key={`f-${index}`} index={index + 1} item={item} />;
@@ -183,12 +221,15 @@ export default function List({
                 />
               );
             }
+            return null;
           })}
         </div>
       </div>
-      <button className={`${styles.navButton} ${styles.navRight}`} onClick={() => scrollBy(400)} aria-label='Scroll right'>
-        <ChevronForward />
-      </button>
+      {!fixedFive && (
+        <button className={`${styles.navButton} ${styles.navRight}`} onClick={() => scrollBy(400)} aria-label='Scroll right'>
+          <ChevronForward />
+        </button>
+      )}
     </div>
   );
 }

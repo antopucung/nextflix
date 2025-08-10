@@ -13,9 +13,9 @@ import useDimensions from '../../hooks/useDimensions';
 const Dialog = dynamic(import('../Dialog'))
 
 const items = [
-  { label: 'Movie', path: '/browse' },
-  { label: 'Ebook', path: '/ebooks' },
-  { label: 'Milestone', path: '/milestones' }
+  { label: 'Film', path: '/browse' },
+  { label: 'Arsip', path: '/ebooks' },
+  { label: 'Lini Masa', path: '/milestones' }
 ];
 
 export default function Menu() {
@@ -47,7 +47,7 @@ export default function Menu() {
 
   return (
     <>
-      <Image src='/assets/logo.png' alt='' width={90} height={30} className={styles.nfLogo} />
+      <Image src='/assets/logo-anri.jpg' alt='ANRI' width={120} height={32} className={styles.nfLogo} />
       {isTablet || isMobile ? (
         <>
           <div className={styles.browse}>

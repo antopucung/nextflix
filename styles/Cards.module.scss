@@ -6,9 +6,13 @@
   flex-direction: column;
   text-transform: capitalize;
   margin-top: 0;
-  margin-bottom: $space-3;
+  margin-bottom: $space-2; /* was $space-3 */
   position: relative; // anchors nav buttons
   /* Do NOT set a non-auto z-index here to avoid creating a limiting stacking context */
+
+  &.fiveAcross {
+    width: 100%;
+  }
 
   @include for-mobile-only {
     margin-top: 0;
@@ -21,7 +25,7 @@
   .category {
     @include fluid-type(0.88rem, 1.6rem);
     margin-left: $space-7;
-    padding: $space-2 0;
+    padding: $space-1 0; /* was $space-2 */
     width: fit-content;
   }
 
@@ -38,12 +42,16 @@
     scrollbar-width: none; // Firefox
     -ms-overflow-style: none; // IE/Edge Legacy
     &::-webkit-scrollbar { display: none; } // WebKit
+
+    &.scrollerStatic {
+      overflow: hidden; // no horizontal scroll when fixed five
+    }
   }
 
   .cardRow {
     display: flex;
     flex-direction: row;
-    padding: $space-3 $space-7 $space-6 $space-7;
+    padding: $space-2 $space-7 $space-4 $space-7; /* was $space-3 ... $space-6 */
     overflow: visible;
     margin-top: 0;
     margin-left: 0;
@@ -52,12 +60,26 @@
     user-select: none;
     -webkit-user-select: none;
 
+    &.cardRowFive {
+      justify-content: space-between;
+      cursor: default;
+      user-select: auto;
+      -webkit-user-select: auto;
+
+      /* Enforce exact five-across sizing for all cards (including special cards) */
+      > .card {
+        width: calc((100% - (2 * #{$space-7}) - (4 * #{$space-2})) / 5);
+        height: calc(((100% - (2 * #{$space-7}) - (4 * #{$space-2})) / 5) * 1.008); /* increased by 40% from 0.72 -> 1.008 */
+      }
+    }
+
     &::-webkit-scrollbar {
       display: none;
     }
 
     @include for-mobile-only {
-      padding: $space-3 $space-3 $space-5 $space-3;
+      
+      padding: $space-2 $space-3 $space-4 $space-3; /* tighter mobile padding */
     }
   }
 
@@ -82,8 +104,8 @@
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  width: clamp(12rem, 18vw, 16rem);
-  height: clamp(10rem, 15vw, 12rem);
+  width: clamp(11rem, 17vw, 15rem); /* slightly smaller */
+  height: clamp(9.5rem, 14.5vw, 11.5rem); /* slightly smaller */
   background: linear-gradient($card-color, $card-color) padding-box,
               linear-gradient(140deg, rgba($gold-500, 0.55), rgba($gold-600, 0.15)) border-box;
   border: 1px solid transparent;
@@ -98,7 +120,7 @@
   position: relative;
 
   &:hover {
-    transform: scale(1.1);
+    transform: scale(1.08); /* slightly less growth */
     box-shadow: 0 8px 24px rgba(212, 175, 55, 0.25), $elev-2;
     z-index: 2000;
 
@@ -155,6 +177,22 @@
     font-size: inherit;
   }
 }
+
+/* Special CTA cards: match base card sizing and layout */
+.specialCard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* inherit base .card background/border to match design */
+}
+
+.specialContent {
+  text-align: center;
+  padding: 8px 10px;
+}
+
+.specialTitle { font-weight: 700; font-size: 1.05rem; }
+.specialSubtitle { opacity: 0.85; font-size: 0.9rem; margin-top: 4px; }
 
 .selected {
   outline: 2px solid $gold-500;

@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 export default function PageTransition({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   return (
-    <AnimatePresence mode='wait' initial={false}>
+    <AnimatePresence exitBeforeEnter initial={false}>
       <motion.div
         key={router.asPath}
         initial={{ opacity: 0, y: 8 }}

@@ -15,7 +15,7 @@ export default function EbookCards({ item }: { item: Ebook }) {
   const { open: openReader } = useContext(ReaderContext);
   const { open, close } = useContext(HoverContext);
   const { isDragging } = useDragContext();
-  const { setFeatured, setSelected, selected, selectedKey } = useContext(FeaturedContext);
+  const { setFeatured, setSelected, selectedMedia, selectedKey } = useContext(FeaturedContext);
   const cardRef = useRef<HTMLDivElement | null>(null);
 
   const preview = (
@@ -56,7 +56,7 @@ export default function EbookCards({ item }: { item: Ebook }) {
     setSelected(item as any, `${rowKey}:${item.id}`);
   };
 
-  const isSelected = selected?.id === (item as any).id && selectedKey?.startsWith((cardRef.current?.closest('[data-row]') as HTMLElement | null)?.getAttribute('data-row') || '');
+  const isSelected = selectedMedia?.id === (item as any).id && selectedKey?.startsWith((cardRef.current?.closest('[data-row]') as HTMLElement | null)?.getAttribute('data-row') || '');
 
   return (
     <div ref={cardRef} className={`${styles.card} ${isSelected ? styles.selected : ''}`} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} onClick={onSelect}>

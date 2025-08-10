@@ -2,13 +2,14 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import styles from '../../styles/Hero.module.scss';
 import Button from '../Button';
-import { Play, Info } from '../../utils/icons';
+import { Play, Info, Book } from '../../utils/icons';
 import type { HeroSlide, Media } from '../../types';
 import { PlayerContext } from '../../context/PlayerContext';
 import { ModalContext } from '../../context/ModalContext';
 import { FeaturedContext } from '../../context/FeaturedContext';
 import { publishHeroSlide } from '../../utils/heroSync';
 import { useRouter } from 'next/router';
+import { ReaderContext } from '../../context/ReaderContext';
 
 const fallbackSlides: HeroSlide[] = [
   { id: 1, img: '/content/hero/slide-1.jpg', title: 'Nextflix', synopsis: 'A simple Netflix clone built using Next.js' }
@@ -23,6 +24,7 @@ const POST_VIDEO_IDLE_MS = 5000; // after video ends, wait 5s then screensaver
 export default function Hero(): React.ReactElement {
   const router = useRouter();
   const isMilestonesPage = router.pathname === '/milestones';
+  const isEbooksPage = router.pathname === '/ebooks';
   const baseRef = useRef<HTMLDivElement | null>(null);
   const overlayRef = useRef<HTMLDivElement | null>(null);
   const [baseSlide, setBaseSlide] = useState<HeroSlide>(fallbackSlides[0]);
@@ -31,6 +33,7 @@ export default function Hero(): React.ReactElement {
   const { play } = useContext(PlayerContext);
   const { setModalData, setIsModal } = useContext(ModalContext);
   const { selectedMedia, candidates, isScreensaverPaused, setScreensaverPaused, lastActivityAt, markActivity, setCurrentSlide } = useContext(FeaturedContext);
+  const { open: openReader } = useContext(ReaderContext);
   const [idx, setIdx] = useState(0);
 
   const fadeTimeoutRef = useRef<number | null>(null);
@@ -181,6 +184,15 @@ export default function Hero(): React.ReactElement {
     const slide = getCurrentSlide();
     setScreensaverPaused(true);
     markActivity();
+
+    if (isEbooksPage) {
+      const ebookMaybe = (candidates || []).find((m) => m.id === slide.id) as any;
+      if (ebookMaybe && ebookMaybe.pdfUrl) {
+        openReader(ebookMaybe);
+        return;
+      }
+    }
+
     play(toMedia(slide));
   };
 
@@ -208,7 +220,7 @@ export default function Hero(): React.ReactElement {
             <div className={styles.title}>{baseSlide.title}</div>
             <div className={styles.synopsis}>{baseSlide.synopsis}</div>
             <div className={styles.buttons}>
-              <Button label='Play' filled Icon={Play} onClick={onPlayCurrent} />
+              <Button label={isEbooksPage ? 'Read' : 'Play'} filled Icon={isEbooksPage ? Book : Play} onClick={onPlayCurrent} />
               <Button label='More Info' Icon={Info} onClick={onInfoCurrent} />
             </div>
           </div>
@@ -224,7 +236,7 @@ export default function Hero(): React.ReactElement {
               <div className={styles.title}>{overlaySlide.title}</div>
               <div className={styles.synopsis}>{overlaySlide.synopsis}</div>
               <div className={styles.buttons}>
-                <Button label='Play' filled Icon={Play} onClick={onPlayCurrent} />
+                <Button label={isEbooksPage ? 'Read' : 'Play'} filled Icon={isEbooksPage ? Book : Play} onClick={onPlayCurrent} />
                 <Button label='More Info' Icon={Info} onClick={onInfoCurrent} />
               </div>
             </div>

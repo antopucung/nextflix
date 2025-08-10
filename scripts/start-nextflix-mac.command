@@ -16,6 +16,7 @@ fi
 node --experimental-fetch ./scripts/seedLocalContent.mjs || true
 
 # Build
+export NODE_OPTIONS=--openssl-legacy-provider
 if command -v yarn >/dev/null 2>&1; then yarn build; else npm run build; fi
 
 # Start server on fixed port

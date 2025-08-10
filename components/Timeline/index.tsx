@@ -4,7 +4,7 @@ import axios from 'axios';
 import styles from '../../styles/Timeline.module.scss';
 import { ChevronBack, ChevronForward } from '../../utils/icons';
 import { FeaturedContext } from '../../context/FeaturedContext';
-import { publishMilestonesState } from '../../utils/heroSync';
+import { publishMilestonesState, publishMilestonesScroll } from '../../utils/heroSync';
 
 type Milestone = { id: number; title: string; overview: string; banner: string };
 
@@ -22,7 +22,7 @@ export default function Timeline(): React.ReactElement {
   const snapDebounceRef = useRef<number | null>(null);
   const autoplayRef = useRef<number | null>(null);
   const isUserInteractingRef = useRef<boolean>(false);
-  const { registerRowItems, clearRowItems, setFeatured, setSelected, selected, selectedKey, globalSearch } = useContext(FeaturedContext);
+  const { registerRowItems, clearRowItems, setFeatured, setSelected, selectedMedia, selectedKey, globalSearch } = useContext(FeaturedContext);
 
   // Load and register items
   useEffect(() => {
@@ -59,16 +59,22 @@ export default function Timeline(): React.ReactElement {
     return nearest;
   };
 
-  const snapToIndex = (index: number, smooth = true) => {
-    const scroller = scrollerRef.current;
-    const cards = getCards();
-    if (!scroller || cards.length === 0) return;
-    const clamped = ((index % cards.length) + cards.length) % cards.length;
-    const target = cards[clamped].offsetLeft + cards[clamped].offsetWidth / 2 - scroller.clientWidth / 2;
-    scroller.scrollTo({ left: target, behavior: smooth ? 'smooth' : 'auto' });
-    currentIndexRef.current = clamped;
-    publishMilestonesState(milestones as any, clamped);
+  const publishState = (indexOverride?: number) => {
+    const items = milestones;
+    const idx = typeof indexOverride === 'number' ? indexOverride : getNearestIndexToCenter();
+    publishMilestonesState(items as any, idx);
   };
+
+  const snapToIndex = (index: number, smooth = true) =>
+    requestAnimationFrame(() => {
+      const scroller = scrollerRef.current;
+      if (!scroller) return;
+      const cards = getCards();
+      if (!cards.length) return; // guard against empty render
+      const clamped = ((index % cards.length) + cards.length) % cards.length;
+      const target = cards[clamped].offsetLeft + cards[clamped].offsetWidth / 2 - scroller.clientWidth / 2;
+      scroller.scrollTo({ left: target, behavior: smooth ? 'smooth' : 'auto' });
+    });
 
   const snapToCenter = (smooth = true) => {
     const idx = getNearestIndexToCenter();
@@ -80,7 +86,7 @@ export default function Timeline(): React.ReactElement {
     snapDebounceRef.current = window.setTimeout(() => {
       if (modeRef.current === 'horizontal') return; // don't snap mid-drag
       const idx = getNearestIndexToCenter();
-      publishMilestonesState(milestones as any, idx);
+      publishState(idx);
       snapToCenter(true);
     }, 160) as unknown as number;
   };
@@ -114,7 +120,7 @@ export default function Timeline(): React.ReactElement {
     // Initial center and start autoplay after items render
     const init = window.setTimeout(() => {
       snapToCenter(false);
-      publishMilestonesState(milestones as any, getNearestIndexToCenter());
+      publishState();
       startAutoplay();
     }, 0);
     return () => {
@@ -161,7 +167,6 @@ export default function Timeline(): React.ReactElement {
     if (modeRef.current === 'horizontal') {
       scrollerRef.current.scrollLeft = startScroll.current - dx;
       e.preventDefault();
-      // avoid aggressive snap while dragging; only use debounced snap when not dragging (onScroll handler)
     }
   };
 
@@ -195,11 +200,11 @@ export default function Timeline(): React.ReactElement {
     setSelected(m as any, `${rowKey}:${m.id}`);
   };
 
-  const isSelected = (m: Milestone, el: HTMLElement | null) => selected?.id === (m as any).id && selectedKey?.startsWith((el?.closest('[data-row]') as HTMLElement | null)?.getAttribute('data-row') || '');
+  const isSelected = (m: Milestone, el: HTMLElement | null) => selectedMedia?.id === (m as any).id && selectedKey?.startsWith((el?.closest('[data-row]') as HTMLElement | null)?.getAttribute('data-row') || '');
 
   return (
     <div className={styles.container} data-row='milestones'>
-      <strong className={styles.heading}>Milestone Timeline</strong>
+      <strong className={styles.heading}>Lini Masa Timeline</strong>
       <button className={`${styles.navButton} ${styles.navLeft}`} onClick={goPrev} aria-label='Scroll left'>
         <ChevronBack />
       </button>
@@ -219,10 +224,17 @@ export default function Timeline(): React.ReactElement {
             <div key={`m-${i}`} className={`${styles.card} ${isSelected(m, scrollerRef.current) ? styles.selected : ''}`}
               onMouseEnter={() => onHover(m)} onMouseLeave={onLeave}
               onClick={(e) => onSelect(m, e.currentTarget as HTMLElement)}>
-              <img className={styles.image} src={m.banner} alt={m.title} />
-              <div className={styles.meta}>
-                <div className={styles.title}>{m.title}</div>
-                <div className={styles.overview}>{m.overview}</div>
+              <img
+                src={m.banner}
+                alt={m.title}
+                className={styles.poster}
+                loading="lazy"
+                decoding="async"
+                sizes="(min-width: 1280px) 28vw, (min-width: 768px) 40vw, 60vw"
+              />
+              <div className={styles.cardInfo}>
+                <strong>{m.title}</strong>
+                <p>{m.overview}</p>
               </div>
             </div>
           ))}

@@ -31,6 +31,7 @@ function App({ Component, pageProps }: AppProps & { pageProps: any }) {
   const isScrolled: boolean = useScrollLimit(SCROLL_LIMIT);
   const router = useRouter();
   const isPreview = router.pathname === '/preview';
+  const isSecondReader = router.pathname === '/second/reader';
 
   useEffect(() => {
     publishRoute(router.pathname);
@@ -41,7 +42,7 @@ function App({ Component, pageProps }: AppProps & { pageProps: any }) {
       <Head>
         <title>Nextflix</title>
         <meta name='description' content='Netflix clone, made using Next.js' />
-        <link rel='icon' href='/favicon.ico' />
+        <link rel='icon' href='/assets/logo-anri.jpg' />
       </Head>
       <PlayerProvider>
         <ReaderProvider>
@@ -50,18 +51,18 @@ function App({ Component, pageProps }: AppProps & { pageProps: any }) {
               <ModalProvider>
                 <FeaturedProvider>
                   <div className={layout.container}>
-                    {!isPreview && <Navbar isScrolled={isScrolled} />}
+                    {!isPreview && !isSecondReader && <Navbar isScrolled={isScrolled} />}
                     <div className={layout.inner}>
                       <PageTransition>
                         <Component {...pageProps} setGlobalDragging={setIsDragging} />
                       </PageTransition>
                     </div>
-                    {!isPreview && <Footer />}
+                    {!isPreview && !isSecondReader && <Footer />}
                   </div>
-                  {!isPreview && <Player />}
-                  {!isPreview && <Reader />}
-                  {!isPreview && <HoverPreview />}
-                  {!isPreview && <PageDragScroll />}
+                  {!isPreview && !isSecondReader && <Player />}
+                  {!isPreview && !isSecondReader && <Reader />}
+                  {!isPreview && !isSecondReader && <HoverPreview />}
+                  {!isPreview && !isSecondReader && <PageDragScroll />}
                 </FeaturedProvider>
               </ModalProvider>
             </DragContext.Provider>

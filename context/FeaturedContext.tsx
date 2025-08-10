@@ -57,14 +57,15 @@ export function FeaturedProvider({ children }: { children: React.ReactNode }) {
   const candidates = useMemo(() => {
     const seen = new Set<number>();
     const flat: Media[] = [];
-    for (const arr of rowMap.values()) {
-      for (const m of arr) {
+    rowMap.forEach((arr) => {
+      for (let i = 0; i < arr.length; i += 1) {
+        const m = arr[i];
         if (!seen.has(m.id)) {
           seen.add(m.id);
           flat.push(m);
         }
       }
-    }
+    });
     return flat;
   }, [rowMap]);
 
