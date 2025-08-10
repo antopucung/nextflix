@@ -30,16 +30,16 @@ export default function MovieCarouselRow(): React.ReactElement {
           <MovieCard key={`mv-${m.id}-${i}`} item={m} index={i} rowKey='movie-main' />
         ))}
         <div className={`${styles.card} ${styles.linkCard}`} role='link' tabIndex={0}
-             onClick={() => router.push('/milestones')}
-             onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') router.push('/milestones'); }}>
-          <img className={styles.poster} src={firstFour[0]?.banner || '/assets/placeholder.jpg'} alt='Lini Masa' />
-          <div className={styles.overlay}><div className={styles.title}>Lini Masa</div></div>
-        </div>
-        <div className={`${styles.card} ${styles.linkCard}`} role='link' tabIndex={0}
              onClick={() => router.push('/ebooks')}
              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') router.push('/ebooks'); }}>
-          <img className={styles.poster} src={firstFour[1]?.banner || '/assets/placeholder.jpg'} alt='Arsip' />
+          <img className={styles.poster} src='/assets/thumb-arsip.png' alt='Arsip' />
           <div className={styles.overlay}><div className={styles.title}>Arsip</div></div>
+        </div>
+        <div className={`${styles.card} ${styles.linkCard}`} role='link' tabIndex={0}
+             onClick={() => router.push('/milestones')}
+             onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') router.push('/milestones'); }}>
+          <img className={styles.poster} src='/assets/thumb-milestone.png' alt='Lini Masa' />
+          <div className={styles.overlay}><div className={styles.title}>Lini Masa</div></div>
         </div>
       </div>
     </div>
