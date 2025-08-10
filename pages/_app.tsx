@@ -37,6 +37,15 @@ function App({ Component, pageProps }: AppProps & { pageProps: any }) {
     publishRoute(router.pathname);
   }, [router.pathname]);
 
+  // Name the main app window so other windows can target it without creating duplicates
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        if (!window.name) window.name = 'NextflixMain';
+      } catch {}
+    }
+  }, []);
+
   return (
     <>      
       <Head>

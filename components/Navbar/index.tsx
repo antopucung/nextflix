@@ -59,6 +59,13 @@ export default function Navbar({ isScrolled }: NavbarProps): React.ReactElement 
   };
   useEffect(() => () => { if (previewWin.current && !previewWin.current.closed) previewWin.current.close(); }, []);
 
+  const openLiniMasa2 = () => {
+    const target = 'NextflixBookAnim';
+    const features = 'noopener,noreferrer';
+    const w = window.open('/BookAnim/index.html', target, features);
+    w?.focus();
+  };
+
   return (
     <motion.div
       className={navBackground}
@@ -76,6 +83,7 @@ export default function Navbar({ isScrolled }: NavbarProps): React.ReactElement 
             <div className={`${styles.options} ${active === 'movies' ? 'active' : ''}`} onClick={() => go('/browse')}>Film</div>
             <div className={`${styles.options} ${active === 'ebooks' ? 'active' : ''}`} onClick={() => go('/ebooks')}>Arsip</div>
             <div className={`${styles.options} ${active === 'milestones' ? 'active' : ''}`} onClick={() => go('/milestones')}>Lini Masa</div>
+            <div className={styles.options} onClick={openLiniMasa2}>LiniMasa2</div>
           </div>
         )}
       </div>

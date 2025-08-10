@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LiniMasa2 – 3D Book Animation</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .back-link {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      z-index: 1000;
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font: 14px/1.2 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    }
+    .back-link:hover { background: rgba(0,0,0,0.8); }
+  </style>
+</head>
+<body>
+  <a class="back-link" href="/browse" target="NextflixMain">← Back to Movies</a>
+  <div class="book">
+    <div class="page">
+      <div class="front cover">
+        <h1>Book Animation<br/>RD CodeFlair</h1>
+        <p>2025.<br/>Second edition</p>
+      </div>
+      <div class="back">
+        <h2>Responsive</h2>
+        <p>Fully responsive CSS flip book, thanks to the <code>cqmin</code> unit.</p>
+      </div>
+    </div>
+
+    <div class="page">
+      <div class="front">
+        <p>Even more, the book height is dicated by the amount of content in the tallest page.
+          The only thing you need to take care of is how much text you put into a page.</p>
+      </div>
+      <div class="back">
+        <img src="https://picsum.photos/id/24/600/600" alt="Img 1" />
+      </div>
+    </div>
+
+    <div class="page">
+      <div class="front">
+        <h2>JS at its minimum</h2>
+        <p>JavaScript is at its minimum. Basically it's only used to set the initial
+          page index and assign click listeners to the pages. Modifies the CSS <b>Var</b>
+          for the <i>current</i> page, and the rest is handled entirely by CSS.</p>
+      </div>
+      <div class="back">
+        <p>Additionally JavaScript allows you to click on an anchor link in your
+          text — without turning the page. You can also have multiple independent
+          flip books in a single document. You're all covered.</p>
+      </div>
+    </div>
+
+    <div class="page">
+      <div class="front">
+        <h2>Crafting CSS magic</h2>
+        <p>The opened (<i>viewing</i>) pages of the flip book are always kept at the same elevation.
+          This is necessary if your book has no inclination (is top-down-view).
+          Have you noticed that you can also click on the pages edge? CSS will nicely animate the group
+          of pages to skip with a staggered animation.</p>
+      </div>
+      <div class="back">
+        <p>Like in this demo, you can change the perspective of the parent container and change the
+          X axis rotation of the book for extra effect.</p>
+      </div>
+    </div>
+
+    <div class="page">
+      <div class="front">
+        <p>The necessary FlipBook's CSS is barely 30 lines, there is no swipe, natural page flip angling,
+          complex shadows, etc. in order to keep it as simple as possible.</p>
+      </div>
+      <div class="back cover">
+        <h3>That's all friends.</h3>
+        <p>Thanks for reading.</p>
+      </div>
+    </div>
+
+    <div class="page">
+      <div class="front">
+        <img src="https://picsum.photos/id/1073/600/600" alt="Img 2" />
+      </div>
+      <div class="back cover">
+        <h3>That's all friends.</h3>
+        <p>Thanks for reading.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html> 

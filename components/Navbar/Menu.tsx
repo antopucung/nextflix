@@ -15,7 +15,8 @@ const Dialog = dynamic(import('../Dialog'))
 const items = [
   { label: 'Film', path: '/browse' },
   { label: 'Arsip', path: '/ebooks' },
-  { label: 'Lini Masa', path: '/milestones' }
+  { label: 'Lini Masa', path: '/milestones' },
+  { label: 'LiniMasa2', path: '/BookAnim/index.html', external: true }
 ];
 
 export default function Menu() {
@@ -40,9 +41,14 @@ export default function Menu() {
     transition: { duration: 0.25 }
   };
 
-  const go = async (path: string) => {
+  const go = async (item: { path: string; external?: boolean }) => {
     setIsVisible(false);
-    if (router.pathname !== path) await router.push(path);
+    if (item.external) {
+      const w = window.open(item.path, 'NextflixBookAnim', 'noopener,noreferrer');
+      w?.focus();
+      return;
+    }
+    if (router.pathname !== item.path) await router.push(item.path);
   };
 
   return (
@@ -60,7 +66,7 @@ export default function Menu() {
           </div>
           <Dialog dialogRef={menuRef} onClose={onClose} classname={styles.menu} visible={isVisible}>
             {items.map((item, index) => (
-              <div key={index} className={styles.options} onClick={() => go(item.path)}>
+              <div key={index} className={styles.options} onClick={() => go(item)}>
                 {item.label}
               </div>
             ))}
