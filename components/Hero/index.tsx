@@ -11,29 +11,35 @@ import { publishHeroSlide } from '../../utils/heroSync';
 import { useRouter } from 'next/router';
 import { ReaderContext } from '../../context/ReaderContext';
 
-const fallbackSlides: HeroSlide[] = [
-  { id: 1, img: '/content/hero/slide-1.jpg', title: 'Nextflix', synopsis: 'A simple Netflix clone built using Next.js' }
-];
-
-const CYCLE_MS = 7000; // time per slide
-const FADE_MS = 2000; // crossfade duration (screensaver)
-const FAST_FADE_MS = 600; // faster crossfade for user selections
-const IDLE_MS = 15000; // start screensaver after 15s inactivity
-const POST_VIDEO_IDLE_MS = 5000; // after video ends, wait 5s then screensaver
+const CYCLE_MS = 7000; // waktu per slide
+const FADE_MS = 2000; // durasi crossfade (screensaver)
+const FAST_FADE_MS = 600; // fade cepat saat user pilih
+const IDLE_MS = 15000; // mulai screensaver setelah idle 15s
+const POST_VIDEO_IDLE_MS = 5000; // tidak dipakai di file ini (disimpan jika dipakai di tempat lain)
 
 export default function Hero(): React.ReactElement {
   const router = useRouter();
   const isMilestonesPage = router.pathname === '/milestones';
   const isEbooksPage = router.pathname === '/ebooks';
-  const baseRef = useRef<HTMLDivElement | null>(null);
+
   const overlayRef = useRef<HTMLDivElement | null>(null);
-  const [baseSlide, setBaseSlide] = useState<HeroSlide>(fallbackSlides[0]);
   const [overlaySlide, setOverlaySlide] = useState<HeroSlide | null>(null);
   const [isFading, setIsFading] = useState(false);
+  const firstShowRef = useRef(true);
+
   const { play } = useContext(PlayerContext);
   const { setModalData, setIsModal } = useContext(ModalContext);
-  const { selectedMedia, candidates, isScreensaverPaused, setScreensaverPaused, lastActivityAt, markActivity, setCurrentSlide } = useContext(FeaturedContext);
+  const {
+    selectedMedia,
+    candidates,
+    isScreensaverPaused,
+    setScreensaverPaused,
+    lastActivityAt,
+    markActivity,
+    setCurrentSlide
+  } = useContext(FeaturedContext);
   const { open: openReader } = useContext(ReaderContext);
+
   const [idx, setIdx] = useState(0);
 
   const fadeTimeoutRef = useRef<number | null>(null);
@@ -41,9 +47,19 @@ export default function Hero(): React.ReactElement {
   const saverIntervalRef = useRef<number | null>(null);
   const idleTimerRef = useRef<number | null>(null);
 
+  // ===========================
+  // 1) DAFTAR VIDEO (URUTAN LINE)
+  // ===========================
+  const videos = [
+    '/content/movies/1.Garuda-Pancasila-Sejarah-Penciptaan-Lambang-Negara/video-1.mp4',
+    '/content/movies/2.Salam-Merdeka-dan-Salam-Pancasila/video-2.mp4',
+    '/content/movies/3.Buku-Api-Pancasila/video-3.mp4',
+    '/content/movies/4.REV-SALAM-PANCASIL/video-4.mp4'
+  ];
+
   // Global activity listeners to reset idle timer
   useEffect(() => {
-    if (isMilestonesPage) return; // on milestones, let saver run continuously
+    if (isMilestonesPage) return; // on milestones, biarkan saver jalan terus
     const onActivity = () => markActivity();
     window.addEventListener('pointerdown', onActivity, { passive: true });
     window.addEventListener('pointermove', onActivity, { passive: true });
@@ -55,68 +71,81 @@ export default function Hero(): React.ReactElement {
     };
   }, [markActivity, isMilestonesPage]);
 
-  // Idle watchdog: pause/resume screensaver based on inactivity (skip on milestones page)
+  // Idle watchdog: JANGAN pause di awal — biar hero langsung muncul
   useEffect(() => {
     if (isMilestonesPage) return; // always on
     if (idleTimerRef.current) {
       window.clearTimeout(idleTimerRef.current);
       idleTimerRef.current = null;
     }
+
+    // aktifkan screensaver segera saat load
+    setScreensaverPaused(false);
+
+    // setelah idle, tetap aktifkan screensaver
     idleTimerRef.current = window.setTimeout(() => {
       setScreensaverPaused(false);
     }, IDLE_MS) as unknown as number;
-    setScreensaverPaused(true);
+
     return () => {
       if (idleTimerRef.current) window.clearTimeout(idleTimerRef.current);
     };
   }, [lastActivityAt, setScreensaverPaused, isMilestonesPage]);
 
-  // Optional static hero as ultimate fallback; real content comes from candidates/selection
+  // Bangun pool dari candidates (dynamic)
+  const pool: HeroSlide[] = (candidates?.length ? candidates : []).slice(0, 24).map(m => ({
+    id: m.id,
+    img: m.banner || m.poster,
+    title: m.title,
+    synopsis: m.overview
+  }));
+
+  // Tampilkan slide pertama segera ketika pool siap (tanpa nunggu interval)
   useEffect(() => {
-    fetch('/api/hero')
-      .then((r) => r.json())
-      .then((res) => {
-        if (res?.data?.length && !selectedMedia && (!candidates || candidates.length === 0)) {
-          const s = res.data[0] as HeroSlide;
-          setBaseSlide(s);
-        }
-      })
-      .catch(() => {});
-  }, [selectedMedia, candidates?.length]);
+    if (!overlaySlide && pool.length) {
+      const first = pool[0];
+      setOverlaySlide(first);
+      setCurrentSlide(first);
+      publishHeroSlide(first);
+      firstShowRef.current = false; // sudah tampil pertama kali
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pool.length, overlaySlide]);
 
-  // Build dynamic pool from candidates
-  const pool: HeroSlide[] = (candidates?.length ? candidates : [])
-    .slice(0, 24)
-    .map((m) => ({ id: m.id, img: m.banner || m.poster, title: m.title, synopsis: m.overview }));
-
-  // Helper to start a robust fade on the overlay element
   const startFade = (duration: number) => {
     const el = overlayRef.current;
     if (!el) return;
-    el.style.transition = 'none';
-    el.style.opacity = '0';
-    // Force reflow
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    (el as any).offsetHeight;
-    requestAnimationFrame(() => {
-      const el2 = overlayRef.current;
-      if (!el2) return;
-      el2.style.transition = `opacity ${duration}ms ease-in-out`;
-      el2.style.opacity = '1';
-    });
+    // JANGAN set 'none' + opacity 0 lagi — slide baru sudah render dengan 0 karena isFading = true
+    el.style.transition = `opacity ${duration}ms ease-in-out`;
+    el.style.opacity = '1';
   };
 
-  // Core crossfade that finishes current fade before processing any pending slide
+  // Core crossfade; overlay selalu yang dirender (tidak ada base card)
   const crossfadeTo = (next: HeroSlide, duration: number) => {
-    setOverlaySlide(next);
+    // Hindari flicker kalau slidenya sama
+    if (overlaySlide && overlaySlide.id === next.id && overlaySlide.img === next.img) return;
+
+    const isFirst = firstShowRef.current;
+
+    if (isFirst) {
+      firstShowRef.current = false;
+      setOverlaySlide(next);
+      setCurrentSlide(next);
+      publishHeroSlide(next);
+      setIsFading(false);
+      return;
+    }
+
+    // ⬇⬇ KUNCI ANTI FLICKER: setIsFading dulu, baru ganti slide
     setIsFading(true);
+    setOverlaySlide(next);
     setCurrentSlide(next);
     publishHeroSlide(next);
+
     requestAnimationFrame(() => startFade(duration));
+
     if (fadeTimeoutRef.current) window.clearTimeout(fadeTimeoutRef.current);
     fadeTimeoutRef.current = window.setTimeout(() => {
-      setBaseSlide(next);
-      setOverlaySlide(null);
       setIsFading(false);
       if (pendingSlideRef.current) {
         const pending = pendingSlideRef.current;
@@ -126,117 +155,137 @@ export default function Hero(): React.ReactElement {
     }, duration) as unknown as number;
   };
 
-  // If user selects a card: queue or crossfade with fast duration
+  // Jika user memilih card: antri / crossfade cepat
   useEffect(() => {
     if (!selectedMedia) return;
-    const next: HeroSlide = { id: selectedMedia.id, img: selectedMedia.banner || selectedMedia.poster, title: selectedMedia.title, synopsis: selectedMedia.overview };
+    const next: HeroSlide = {
+      id: selectedMedia.id,
+      img: selectedMedia.banner || selectedMedia.poster,
+      title: selectedMedia.title,
+      synopsis: selectedMedia.overview
+    };
     if (isFading) {
       pendingSlideRef.current = next;
     } else {
       crossfadeTo(next, FAST_FADE_MS);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedMedia, isFading]);
 
-  // Start/stop screensaver
+  // Start/stop screensaver (rotasi otomatis)
   useEffect(() => {
     if (saverIntervalRef.current) {
       window.clearInterval(saverIntervalRef.current);
       saverIntervalRef.current = null;
     }
     if (selectedMedia || !pool.length) return;
-    if (!isMilestonesPage && isScreensaverPaused) return; // on milestones, ignore idle pause
+    if (!isMilestonesPage && isScreensaverPaused) return; // on milestones, abaikan idle pause
 
     const advance = () => {
+      if (!pool.length) return;
       const next = pool[(idx + 1) % pool.length];
       if (isFading) return;
       crossfadeTo(next, FADE_MS);
-      setIdx((i) => (i + 1) % pool.length);
+      setIdx(i => (i + 1) % pool.length);
     };
 
-    advance();
     saverIntervalRef.current = window.setInterval(advance, CYCLE_MS) as unknown as number;
+
     return () => {
       if (saverIntervalRef.current) window.clearInterval(saverIntervalRef.current);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pool.length, selectedMedia, idx, isFading, isScreensaverPaused, isMilestonesPage]);
 
-  useEffect(() => () => {
-    if (fadeTimeoutRef.current) window.clearTimeout(fadeTimeoutRef.current);
-    if (saverIntervalRef.current) window.clearInterval(saverIntervalRef.current);
-    if (idleTimerRef.current) window.clearTimeout(idleTimerRef.current);
+  useEffect(() => {
+    return () => {
+      if (fadeTimeoutRef.current) window.clearTimeout(fadeTimeoutRef.current);
+      if (saverIntervalRef.current) window.clearInterval(saverIntervalRef.current);
+      if (idleTimerRef.current) window.clearTimeout(idleTimerRef.current);
+    };
   }, []);
 
-  // Helper to get the slide currently visible to the user
-  const getCurrentSlide = (): HeroSlide => (overlaySlide ?? baseSlide);
+  // Helper: cari URL video berdasarkan urutan slide di pool
+  const videoForSlide = (s: HeroSlide): string => {
+    const i = pool.findIndex(p => p.id === s.id);
+    const idxInPool = i === -1 ? 0 : i;
+    return videos[idxInPool % videos.length];
+    // NOTE:
+    // - Urutan videos[] HARUS sesuai urutan slide di pool (line order).
+    // - Kalau pool > videos.length, dia wrap pakai modulo.
+  };
 
-  const toMedia = (s: HeroSlide): Media => ({
-    id: s.id,
-    title: s.title,
-    overview: s.synopsis,
-    poster: s.img,
-    banner: s.img,
-    rating: 4.5,
-    genre: []
-  } as Media);
+  // Helper ambil slide aktif
+  const getCurrentSlide = (): HeroSlide | null => overlaySlide;
+
+  const toMedia = (s: HeroSlide): Media =>
+    ({
+      id: s.id,
+      title: s.title,
+      overview: s.synopsis,
+      poster: s.img,
+      banner: s.img,
+      rating: 4.5,
+      genre: [],
+      // inject videoUrl biar PlayerContext pakai file lokal
+      videoUrl: videoForSlide(s)
+    } as any as Media);
 
   const onPlayCurrent = () => {
     const slide = getCurrentSlide();
+    if (!slide) return;
     setScreensaverPaused(true);
     markActivity();
 
     if (isEbooksPage) {
-      const ebookMaybe = (candidates || []).find((m) => m.id === slide.id) as any;
+      const ebookMaybe = (candidates || []).find(m => m.id === slide.id) as any;
       if (ebookMaybe && ebookMaybe.pdfUrl) {
         openReader(ebookMaybe);
         return;
       }
     }
 
+    // PENTING: media sudah berisi videoUrl lokal
     play(toMedia(slide));
   };
 
   const onInfoCurrent = () => {
     const slide = getCurrentSlide();
+    if (!slide) return;
     markActivity();
+    setScreensaverPaused(true); // cegah rotasi saat modal terbuka
     const media = toMedia(slide);
     setModalData(media);
     setIsModal(true);
   };
 
+  // Update current slide ke context tiap overlaySlide berubah
   useEffect(() => {
-    const slide = overlaySlide ?? baseSlide;
-    setCurrentSlide(slide);
-    publishHeroSlide(slide);
-  }, [overlaySlide, baseSlide, setCurrentSlide]);
+    if (!overlaySlide) return;
+    setCurrentSlide(overlaySlide);
+    publishHeroSlide(overlaySlide);
+  }, [overlaySlide, setCurrentSlide]);
 
   return (
     <div className={styles.hero}>
-      {/* Base layer */}
-      <div ref={baseRef} className={styles.scroller} style={{ opacity: 1 }}>
-        <div className={styles.slide}>
-          <img className={styles.image} src={baseSlide.img} alt={baseSlide.title} />
-          <div className={styles.details}>
-            <div className={styles.title}>{baseSlide.title}</div>
-            <div className={styles.synopsis}>{baseSlide.synopsis}</div>
-            <div className={styles.buttons}>
-              <Button label={isEbooksPage ? 'Read' : 'Play'} filled Icon={isEbooksPage ? Book : Play} onClick={onPlayCurrent} />
-              <Button label='More Info' Icon={Info} onClick={onInfoCurrent} />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Overlay cross-fade layer */}
+      {/* Overlay layer (satu-satunya yang dirender) */}
       {overlaySlide && (
-        <div ref={overlayRef} className={styles.scroller} style={{ position: 'absolute', inset: 0, opacity: 0 }}>
+        <div
+          ref={overlayRef}
+          className={styles.scroller}
+          style={{ position: 'absolute', inset: 0, opacity: isFading ? 0 : 1 }}>
           <div className={styles.slide}>
-            <img className={styles.image} src={overlaySlide.img} alt={overlaySlide.title} />
+            <img className={styles.image} src={overlaySlide.img} alt={overlaySlide.title} loading='eager' />
             <div className={styles.details}>
               <div className={styles.title}>{overlaySlide.title}</div>
               <div className={styles.synopsis}>{overlaySlide.synopsis}</div>
               <div className={styles.buttons}>
-                <Button label={isEbooksPage ? 'Read' : 'Play'} filled Icon={isEbooksPage ? Book : Play} onClick={onPlayCurrent} />
+                <Button
+                  label={isEbooksPage ? 'Read' : 'Play'}
+                  filled
+                  Icon={isEbooksPage ? Book : Play}
+                  onClick={onPlayCurrent}
+                />
                 <Button label='More Info' Icon={Info} onClick={onInfoCurrent} />
               </div>
             </div>
@@ -250,4 +299,4 @@ export default function Hero(): React.ReactElement {
       </div>
     </div>
   );
-} 
+}
