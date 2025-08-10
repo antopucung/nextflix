@@ -155,4 +155,17 @@ Folder: `public/content/hero/`
 ## License
 MIT
 
+## Setup Notes (Other PCs)
+- Install Node via nvm and use the pinned version:
+  ```bash
+  nvm use
+  ```
+  If not installed, install Node 16–20. The project has `.nvmrc` and `engines` to guide this.
+- Copy `.env.example` to `.env` and fill values if you use API routes:
+  ```bash
+  cp .env.example .env
+  # edit TMDB_KEY if you plan to use /api routes that fetch from TMDB
+  ```
+- After `npm install` or `yarn`, a postinstall script ensures `public/pdf.worker.min.js` is copied from `pdfjs-dist`. This avoids symlink issues on Windows.
+
 

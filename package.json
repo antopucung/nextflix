@@ -3,11 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "NODE_OPTIONS=--openssl-legacy-provider PORT=3000 next dev",
-    "build": "NODE_OPTIONS=--openssl-legacy-provider next build",
-    "start": "PORT=3000 next start",
+    "dev": "cross-env NODE_OPTIONS=--openssl-legacy-provider PORT=3000 next dev",
+    "build": "cross-env NODE_OPTIONS=--openssl-legacy-provider next build",
+    "start": "cross-env PORT=3000 next start",
     "lint": "next lint && stylelint \"styles/**/*.scss\"",
     "prepare": "husky install",
+    "postinstall": "node ./scripts/setup-pdf-worker.mjs",
     "seed:local": "node --experimental-fetch ./scripts/seedLocalContent.mjs",
     "start:mac": "bash ./scripts/start-nextflix-mac.command",
     "start:win": "powershell -ExecutionPolicy Bypass -File ./scripts/start-nextflix-win.ps1",
@@ -39,6 +40,10 @@
     "stylelint": "^16.0.0",
     "stylelint-config-standard-scss": "^13.0.0",
     "stylelint-no-unsupported-browser-features": "^7.0.0",
-    "typescript": "4.3.5"
+    "typescript": "4.3.5",
+    "cross-env": "^7.0.3"
+  },
+  "engines": {
+    "node": ">=16 <21"
   }
 }
