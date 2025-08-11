@@ -31,8 +31,12 @@ export function ReaderProvider({ children }: { children: React.ReactNode }) {
     // Only try to open the second screen from the primary screen and if none is already present
     const onSecondOrPreviewRoute =
       typeof window !== 'undefined' && (window.location.pathname === '/second/reader' || window.location.pathname === '/preview');
-    // Disable second-screen popup on the ebooks page (single monitor mode)
-    const onEbooksRoute = typeof window !== 'undefined' && (window.location.pathname === '/ebooks' || window.location.pathname === '/ebooks2');
+    // Disable second-screen popup on the ebooks/gallery pages (single monitor mode)
+    const onEbooksRoute = typeof window !== 'undefined' && (
+      window.location.pathname === '/ebooks' ||
+      window.location.pathname === '/ebooks2' ||
+      window.location.pathname === '/arsip-gallery'
+    );
     if (!onSecondOrPreviewRoute && !onEbooksRoute && !isSecondScreenPresent()) {
       // ensureSecondWindow(); // disabled for /ebooks
       ensureSecondWindow();
