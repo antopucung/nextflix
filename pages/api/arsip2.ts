@@ -22,6 +22,36 @@ function isPathInside(parent: string, child: string): boolean {
   return !!rel && !rel.startsWith('..') && !path.isAbsolute(rel);
 }
 
+const MONTHS_ID: Record<string, number> = {
+  januari: 1,
+  februari: 2,
+  maret: 3,
+  april: 4,
+  mei: 5,
+  juni: 6,
+  juli: 7,
+  agustus: 8,
+  september: 9,
+  oktober: 10,
+  november: 11,
+  desember: 12,
+};
+
+function parseIndoDateKey(name: string): number | null {
+  // Accept formats like: "29 Mei 1945" or "1 Juni 1945" (case-insensitive)
+  const re = /^(\d{1,2})\s+([A-Za-z]+)(?:\s+(\d{4}))?/i;
+  const m = name.match(re);
+  if (!m) return null;
+  const d = parseInt(m[1], 10);
+  const monthName = m[2].toLowerCase();
+  const month = MONTHS_ID[monthName];
+  if (!month) return null;
+  const year = m[3] ? parseInt(m[3], 10) : 1945;
+  if (isNaN(d) || isNaN(month) || isNaN(year)) return null;
+  // yyyyMMdd numeric key
+  return year * 10000 + month * 100 + d;
+}
+
 function listDir(absDir: string, relDir: string): ExplorerItem[] {
   const entries = fs.readdirSync(absDir, { withFileTypes: true });
   const items: ExplorerItem[] = [];
@@ -58,9 +88,16 @@ function listDir(absDir: string, relDir: string): ExplorerItem[] {
       });
     }
   }
-  // sort folders first, then files; both by name ascending (locale-aware)
+  // sort folders first, then files; folders by date-name if detected, else by name; files by name
   items.sort((a, b) => {
     if (a.type !== b.type) return a.type === 'dir' ? -1 : 1;
+    if (a.type === 'dir' && b.type === 'dir') {
+      const ka = parseIndoDateKey(a.name);
+      const kb = parseIndoDateKey(b.name);
+      if (ka != null && kb != null) return ka - kb; // chronological ascending
+      if (ka != null && kb == null) return -1; // date-like before plain
+      if (kb != null && ka == null) return 1;
+    }
     return a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' });
   });
   return items;
