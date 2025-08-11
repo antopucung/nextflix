@@ -9,7 +9,7 @@ type PdfViewerProps = {
 export default function PdfViewer({ fileUrl, plugins = [] }: PdfViewerProps): React.ReactElement {
   return (
     <Worker workerUrl="/pdf.worker.min.js">
-      <Viewer fileUrl={fileUrl} theme={{ theme: 'dark' }} plugins={plugins as any} />
+      <Viewer key={fileUrl} fileUrl={fileUrl} theme={{ theme: 'dark' }} plugins={plugins as any} />
     </Worker>
   );
 } 

@@ -98,6 +98,7 @@ export default function Explorer(): React.ReactElement {
         genre: [],
         pdfUrl: item.url || ''
       };
+      // Open PDF directly (hide gallery arrows for PDFs)
       openReader(ebook);
       setPreview(null);
       // reset any prior pdf drag state
@@ -305,7 +306,8 @@ export default function Explorer(): React.ReactElement {
 
   // Grid drag-to-scroll handlers (scroll page vertically)
   const getPageScroller = (): HTMLElement => {
-    return document.scrollingElement || document.documentElement || document.body;
+    const el = (document.scrollingElement || document.documentElement || document.body) as Element;
+    return el as HTMLElement;
   };
 
   const onGridPointerDown: React.PointerEventHandler<HTMLDivElement> = (e) => {

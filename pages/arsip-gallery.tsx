@@ -20,6 +20,18 @@ export default function ArsipGalleryPage(props: { setGlobalDragging?: (d: boolea
 
   useEffect(() => { return () => {}; }, []);
 
+  // Hide OS scrollbars on this page (Windows aesthetic)
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      document.body.classList.add('hide-scrollbars');
+      document.documentElement.classList.add('hide-scrollbars');
+      return () => {
+        document.body.classList.remove('hide-scrollbars');
+        document.documentElement.classList.remove('hide-scrollbars');
+      };
+    }
+  }, []);
+
   useEffect(() => {
     let isOpen = false;
     const unsub = subscribeReader(

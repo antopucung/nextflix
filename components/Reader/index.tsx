@@ -135,6 +135,17 @@ export default function Reader() {
     };
   }, [isOpen, ebook, isImage]);
 
+  // Keyboard navigation for images (left/right arrows)
+  useEffect(() => {
+    if (!isOpen || !ebook || !isImage) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') navPrev();
+      else if (e.key === 'ArrowRight') navNext();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [isOpen, ebook, isImage, navPrev, navNext]);
+
   // Drag-to-scroll handlers over the viewer container (PDF mode)
   const onPointerDownPdf = (e: React.PointerEvent<HTMLDivElement>) => {
     if (isImage) return;
@@ -338,16 +349,23 @@ export default function Reader() {
 
   if (!isOpen || !ebook) return null;
 
+  const multipleImages = isImage && (galleryUrls?.length || 0) > 1;
+
   return (
     <div ref={overlayRef} className={styles.overlay}>
       <div className={styles.header}>
         <div className={styles.title}>{ebook.title}</div>
+        {isImage && galleryUrls && galleryUrls.length > 1 && (
+          <div className={styles.counter}>{(galleryIndex ?? 0) + 1} / {galleryUrls.length}</div>
+        )}
         <button className={styles.close} onClick={close}>×</button>
       </div>
       <div className={styles.window}>
-        <div className={styles.thumbs}>
-          <div className={styles.thumbTitle}>Halaman</div>
-        </div>
+        {!isImage && (
+          <div className={styles.thumbs}>
+            <div className={styles.thumbTitle}>Halaman</div>
+          </div>
+        )}
         {!isImage ? (
           <div
             ref={scrollContainerRef}
@@ -364,7 +382,9 @@ export default function Reader() {
           </div>
         ) : (
           <div className={styles.contentImage}>
-            <button className={`${styles.navButton} ${styles.navLeft}`} onClick={navPrev} aria-label='Previous image'>‹</button>
+            {multipleImages && (
+              <button className={`${styles.navButton} ${styles.navLeft}`} onClick={navPrev} aria-label='Previous image'>‹</button>
+            )}
             <div
               ref={imgHostRef}
               className={styles.imageHost}
@@ -383,7 +403,9 @@ export default function Reader() {
                 style={{ transform: `translate3d(${imgTranslateState.x}px, ${imgTranslateState.y}px, 0) scale(${imgScale})` }}
               />
             </div>
-            <button className={`${styles.navButton} ${styles.navRight}`} onClick={navNext} aria-label='Next image'>›</button>
+            {multipleImages && (
+              <button className={`${styles.navButton} ${styles.navRight}`} onClick={navNext} aria-label='Next image'>›</button>
+            )}
           </div>
         )}
       </div>

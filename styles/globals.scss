@@ -21,6 +21,15 @@ body::before {
   z-index: 0;
 }
 
+/* Hide OS scrollbars for specific pages when class present on html or body */
+html.hide-scrollbars, body.hide-scrollbars {
+  /* Firefox */
+  scrollbar-width: none !important;
+  /* IE/Edge */
+  -ms-overflow-style: none !important;
+}
+html.hide-scrollbars::-webkit-scrollbar, body.hide-scrollbars::-webkit-scrollbar { display: none !important; }
+
 a {
   color: inherit;
   text-decoration: none;
