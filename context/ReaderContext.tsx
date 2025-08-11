@@ -32,7 +32,7 @@ export function ReaderProvider({ children }: { children: React.ReactNode }) {
     const onSecondOrPreviewRoute =
       typeof window !== 'undefined' && (window.location.pathname === '/second/reader' || window.location.pathname === '/preview');
     // Disable second-screen popup on the ebooks page (single monitor mode)
-    const onEbooksRoute = typeof window !== 'undefined' && window.location.pathname === '/ebooks';
+    const onEbooksRoute = typeof window !== 'undefined' && (window.location.pathname === '/ebooks' || window.location.pathname === '/ebooks2');
     if (!onSecondOrPreviewRoute && !onEbooksRoute && !isSecondScreenPresent()) {
       // ensureSecondWindow(); // disabled for /ebooks
       ensureSecondWindow();

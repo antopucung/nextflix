@@ -20,7 +20,7 @@ export default function Navbar({ isScrolled }: NavbarProps): React.ReactElement 
   const { isMobile } = useDimensions();
   const router = useRouter();
   const active = useMemo(() => {
-    if (router.pathname === '/ebooks') return 'ebooks';
+    if (router.pathname === '/arsip-gallery') return 'arsip-gallery';
     if (router.pathname === '/milestones') return 'milestones';
     return 'movies';
   }, [router.pathname]);
@@ -59,13 +59,6 @@ export default function Navbar({ isScrolled }: NavbarProps): React.ReactElement 
   };
   useEffect(() => () => { if (previewWin.current && !previewWin.current.closed) previewWin.current.close(); }, []);
 
-  const openLiniMasa2 = () => {
-    const target = 'NextflixBookAnim';
-    const features = 'noopener,noreferrer';
-    const w = window.open('/BookAnim/index.html', target, features);
-    w?.focus();
-  };
-
   return (
     <motion.div
       className={navBackground}
@@ -81,20 +74,19 @@ export default function Navbar({ isScrolled }: NavbarProps): React.ReactElement 
         {!isMobile && (
           <div style={{ display: 'flex', marginLeft: '1rem' }}>
             <div className={`${styles.options} ${active === 'movies' ? 'active' : ''}`} onClick={() => go('/browse')}>Film</div>
-            <div className={`${styles.options} ${active === 'ebooks' ? 'active' : ''}`} onClick={() => go('/ebooks')}>Arsip</div>
+            <div className={`${styles.options} ${active === 'arsip-gallery' ? 'active' : ''}`} onClick={() => go('/arsip-gallery')}>Arsip Gallery</div>
             <div className={`${styles.options} ${active === 'milestones' ? 'active' : ''}`} onClick={() => go('/milestones')}>Lini Masa</div>
-            {/* <div className={styles.options} onClick={openLiniMasa2}>LiniMasa2</div> */}
           </div>
         )}
       </div>
 
-      {/* <div className={styles.navBar__right}>
+      <div className={styles.navBar__right}>
         <SearchBar />
         <button className={styles.icon} aria-label='Open preview' title='Open preview (Second Screen)'
           onClick={openPreview} style={{ zIndex: 9999, background: 'transparent', border: 'none', cursor: 'pointer' }}>
           <Monitor />
         </button>
-      </div> */}
+      </div>
     </motion.div>
   );
 }

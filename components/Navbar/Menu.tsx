@@ -14,9 +14,10 @@ const Dialog = dynamic(import('../Dialog'));
 
 const items = [
   { label: 'Film', path: '/browse' },
-  { label: 'Arsip', path: '/ebooks' },
+  { label: 'Arsip Gallery', path: '/arsip-gallery' },
   { label: 'Lini Masa', path: '/milestones' },
-  { label: 'LiniMasa2', path: '/BookAnim/index.html', external: true }
+  // Optional external link; uncomment if needed
+  // { label: 'LiniMasa2', path: '/BookAnim/index.html', external: true }
 ];
 
 export default function Menu() {

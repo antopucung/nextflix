@@ -119,14 +119,32 @@ export default function Timeline(): React.ReactElement {
   useEffect(() => {
     // Initial center and start autoplay after items render
     const init = window.setTimeout(() => {
-      snapToCenter(false);
-      publishState();
-      startAutoplay();
+      // Wait two RAFs to ensure layout/scroll metrics are stable after hydration
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          snapToCenter(false);
+          publishState();
+          startAutoplay();
+        });
+      });
     }, 0);
+
+    // Recenter on scroller resize (e.g., font loading, layout shift, header height changes)
+    let ro: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== 'undefined') {
+      ro = new ResizeObserver(() => snapToCenter(false));
+      if (scrollerRef.current) ro.observe(scrollerRef.current);
+    }
+
+    const onLoad = () => snapToCenter(false);
+    window.addEventListener('load', onLoad, { once: true } as any);
+
     return () => {
       window.clearTimeout(init);
       stopAutoplay();
       if (snapDebounceRef.current) window.clearTimeout(snapDebounceRef.current);
+      try { ro?.disconnect(); } catch {}
+      window.removeEventListener('load', onLoad as any);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [milestones.length]);
@@ -231,6 +249,7 @@ export default function Timeline(): React.ReactElement {
                 loading="lazy"
                 decoding="async"
                 sizes="(min-width: 1280px) 28vw, (min-width: 768px) 40vw, 60vw"
+                onLoad={() => snapToCenter(false)}
               />
               <div className={styles.cardInfo}>
                 <strong>{m.title}</strong>
