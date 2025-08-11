@@ -21,7 +21,7 @@ export default function Explorer(): React.ReactElement {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [preview, setPreview] = useState<Preview>(null);
-  const { open: openReader } = useContext(ReaderContext);
+  const { open: openReader, openWithGallery } = useContext(ReaderContext);
 
   // image zoom state
   const zoomHostRef = useRef<HTMLDivElement | null>(null);
@@ -116,10 +116,17 @@ export default function Explorer(): React.ReactElement {
         banner: item.url || '',
         rating: 0,
         genre: [],
-        // Reuse pdfUrl field to pass image URL to Reader; Reader will detect non-PDF and render image viewer
         pdfUrl: item.url || ''
       };
-      openReader(ebook);
+      // collect gallery images from current listing order
+      const imageUrls = items.filter(it => it.type === 'file' && IMAGE_EXT.includes((it.ext || '').toLowerCase())).map(it => it.url || '').filter(Boolean);
+      const currentIndex = imageUrls.findIndex(u => u === item.url);
+      if (imageUrls.length > 0 && currentIndex >= 0) {
+        // Use global Reader with gallery
+        openWithGallery(ebook, imageUrls, currentIndex);
+      } else {
+        openReader(ebook);
+      }
       setPreview(null);
       // reset image state
       setZoomScale(1);

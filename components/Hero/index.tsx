@@ -20,7 +20,7 @@ const POST_VIDEO_IDLE_MS = 5000; // tidak dipakai di file ini (disimpan jika dip
 export default function Hero(): React.ReactElement {
   const router = useRouter();
   const isMilestonesPage = router.pathname === '/milestones';
-  const isEbooksPage = router.pathname === '/ebooks';
+  const isEbooksPage = router.pathname === '/arsip-gallery';
 
   const overlayRef = useRef<HTMLDivElement | null>(null);
   const [overlaySlide, setOverlaySlide] = useState<HeroSlide | null>(null);

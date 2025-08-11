@@ -205,7 +205,7 @@ export default function List({
             }
             if (fixedFive && index === 4) {
               return (
-                <SpecialCard key={`special-ebooks`} label="Arsip & Ebooks" sublabel="Buka halaman Arsip" onClick={() => router.push('/ebooks')} />
+                <SpecialCard key={`special-ebooks`} label="Arsip Gallery" sublabel="Buka halaman Arsip" onClick={() => router.push('/arsip-gallery')} />
               );
             }
             if (topList) {

@@ -29,7 +29,7 @@ export default function Preview(): React.ReactElement {
     const unsub = subscribeRoute((pathname) => {
       if (pathname === '/milestones') setForceMilestones(true);
       else setForceMilestones(false);
-      if (pathname === '/ebooks') setForceEbooks(true);
+      if (pathname === '/arsip-gallery') setForceEbooks(true);
       else setForceEbooks(false);
     });
     return () => { unsub(); };
@@ -236,7 +236,7 @@ export default function Preview(): React.ReactElement {
           <div className={stylesHero.buttons}>
             <Button label='Play' filled Icon={Play} onClick={onPlay} />
             <Button label='More Info' Icon={Info} onClick={() => window.open('/browse', '_blank')} />
-            <Button label='Read' Icon={Book} onClick={() => window.open('/ebooks', '_blank')} />
+            <Button label='Read' Icon={Book} onClick={() => window.open('/arsip-gallery', '_blank')} />
           </div>
         </div>
       </div>
@@ -250,7 +250,7 @@ export default function Preview(): React.ReactElement {
             <div className={stylesHero.buttons}>
               <Button label='Play' filled Icon={Play} onClick={onPlay} />
               <Button label='More Info' Icon={Info} onClick={() => window.open('/browse', '_blank')} />
-              <Button label='Read' Icon={Book} onClick={() => window.open('/ebooks', '_blank')} />
+              <Button label='Read' Icon={Book} onClick={() => window.open('/arsip-gallery', '_blank')} />
             </div>
           </div>
         </div>

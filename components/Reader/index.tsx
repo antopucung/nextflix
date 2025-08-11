@@ -14,7 +14,7 @@ const debugLog = (...args: any[]) => console.log('[ReaderSwipe]', ...args);
 const IMAGE_EXT = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
 
 export default function Reader() {
-  const { isOpen, ebook, close } = useContext(ReaderContext);
+  const { isOpen, ebook, close, navPrev, navNext, galleryUrls, galleryIndex } = useContext(ReaderContext);
   const timerRef = useRef<number | null>(null);
   const overlayRef = useRef<HTMLDivElement | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
@@ -364,6 +364,7 @@ export default function Reader() {
           </div>
         ) : (
           <div className={styles.contentImage}>
+            <button className={`${styles.navButton} ${styles.navLeft}`} onClick={navPrev} aria-label='Previous image'>‹</button>
             <div
               ref={imgHostRef}
               className={styles.imageHost}
@@ -382,6 +383,7 @@ export default function Reader() {
                 style={{ transform: `translate3d(${imgTranslateState.x}px, ${imgTranslateState.y}px, 0) scale(${imgScale})` }}
               />
             </div>
+            <button className={`${styles.navButton} ${styles.navRight}`} onClick={navNext} aria-label='Next image'>›</button>
           </div>
         )}
       </div>
