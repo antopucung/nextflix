@@ -80,13 +80,13 @@ export default function Navbar({ isScrolled }: NavbarProps): React.ReactElement 
         )}
       </div>
 
-      <div className={styles.navBar__right}>
+      {/* <div className={styles.navBar__right}>
         <SearchBar />
         <button className={styles.icon} aria-label='Open preview' title='Open preview (Second Screen)'
           onClick={openPreview} style={{ zIndex: 9999, background: 'transparent', border: 'none', cursor: 'pointer' }}>
           <Monitor />
         </button>
-      </div>
+      </div> */}
     </motion.div>
   );
 }
